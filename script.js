@@ -1,1838 +1,518 @@
-/* =========================================================
-   CARCONSTRUCTOR
-   ENGINE + FUEL + DRIVE SYSTEM
-========================================================= */
+// ========================================
+ // NAIL STUDIO — SUPABASE
+ // ========================================
 
+const SUPABASE_URL = "https://wgkssqygsmjnbcesjlmo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_dxlbMcH6wGVIYfijioXGAQ_SyIOiMFq";
 
-/* =========================================================
-   ТЕКУЩАЯ КОНФИГУРАЦИЯ
-========================================================= */
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-let car = {
-    body: "SEDAN",
-    fuel: "AI-92",
-    engine: "I4-1.6-92",
-    drive: "FWD",
-    gearbox: "AT"
-};
+let selectedStartAt = null;
+let availableTimesRequest = 0;
 
 
-/* =========================================================
-   КУЗОВА
-========================================================= */
+// ========================================
+// ЗАГРУЗКА УСЛУГ
+// ========================================
 
-const bodyData = {
+async function loadServices() {
+    const container = document.getElementById("services-list");
+    const serviceSelect = document.getElementById("booking-service");
 
-    SEDAN: {
-        mass: 1500,
-        baseAcceleration: 8.2
-    },
-
-    COUPE: {
-        mass: 1450,
-        baseAcceleration: 7.5
-    },
-
-    SUV: {
-        mass: 1750,
-        baseAcceleration: 9.0
-    },
-
-    WAGON: {
-        mass: 1600,
-        baseAcceleration: 8.7
-    }
-
-};
-
-
-/* =========================================================
-   ДВИГАТЕЛИ
-   6 ДВИГАТЕЛЕЙ НА КАЖДЫЙ ТИП ТОПЛИВА
-========================================================= */
-
-const engineData = {
-
-    /* ================= AI-92 ================= */
-
-    "I4-1.6-92": {
-        name: "1.6 I4",
-        fuel: "AI-92",
-        type: "I4",
-        volume: "1.6 L",
-        cylinders: 4,
-        power: 120,
-        mass: 140
-    },
-
-    "I4-1.8-92": {
-        name: "1.8 I4",
-        fuel: "AI-92",
-        type: "I4",
-        volume: "1.8 L",
-        cylinders: 4,
-        power: 135,
-        mass: 150
-    },
-
-    "I4-2.0-92": {
-        name: "2.0 I4",
-        fuel: "AI-92",
-        type: "I4",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 155,
-        mass: 165
-    },
-
-    "I5-2.5-92": {
-        name: "2.5 I5",
-        fuel: "AI-92",
-        type: "I5",
-        volume: "2.5 L",
-        cylinders: 5,
-        power: 200,
-        mass: 185
-    },
-
-    "V6-3.0-92": {
-        name: "3.0 V6",
-        fuel: "AI-92",
-        type: "V6",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 260,
-        mass: 210
-    },
-
-    "V8-4.0-92": {
-        name: "4.0 V8",
-        fuel: "AI-92",
-        type: "V8",
-        volume: "4.0 L",
-        cylinders: 8,
-        power: 380,
-        mass: 245
-    },
-
-
-    /* ================= AI-95 ================= */
-
-    "I4-1.5-95": {
-        name: "1.5 I4 Turbo",
-        fuel: "AI-95",
-        type: "I4 Turbo",
-        volume: "1.5 L",
-        cylinders: 4,
-        power: 150,
-        mass: 145
-    },
-
-    "I4-2.0-95": {
-        name: "2.0 I4",
-        fuel: "AI-95",
-        type: "I4",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 175,
-        mass: 165
-    },
-
-    "I4-2.0T-95": {
-        name: "2.0 I4 Turbo",
-        fuel: "AI-95",
-        type: "I4 Turbo",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 220,
-        mass: 175
-    },
-
-    "I5-2.5-95": {
-        name: "2.5 I5",
-        fuel: "AI-95",
-        type: "I5",
-        volume: "2.5 L",
-        cylinders: 5,
-        power: 240,
-        mass: 190
-    },
-
-    "V6-3.0-95": {
-        name: "3.0 V6",
-        fuel: "AI-95",
-        type: "V6",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 310,
-        mass: 215
-    },
-
-    "V8-4.0-95": {
-        name: "4.0 V8",
-        fuel: "AI-95",
-        type: "V8",
-        volume: "4.0 L",
-        cylinders: 8,
-        power: 450,
-        mass: 250
-    },
-
-
-    /* ================= AI-98 ================= */
-
-    "I4-1.6-98": {
-        name: "1.6 I4 Turbo",
-        fuel: "AI-98",
-        type: "I4 Turbo",
-        volume: "1.6 L",
-        cylinders: 4,
-        power: 180,
-        mass: 150
-    },
-
-    "I4-2.0-98": {
-        name: "2.0 I4",
-        fuel: "AI-98",
-        type: "I4",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 205,
-        mass: 170
-    },
-
-    "I4-2.0T-98": {
-        name: "2.0 I4 Turbo",
-        fuel: "AI-98",
-        type: "I4 Turbo",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 250,
-        mass: 180
-    },
-
-    "I5-2.5-98": {
-         name: "2.5 I5 Turbo",
-        fuel: "AI-98",
-        type: "I5 Turbo",
-        volume: "2.5 L",
-        cylinders: 5,
-        power: 300,
-        mass: 195
-    },
-
-    "V6-3.0-98": {
-        name: "3.0 V6 Turbo",
-        fuel: "AI-98",
-        type: "V6 Turbo",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 370,
-        mass: 225
-    },
-
-    "V8-4.0-98": {
-        name: "4.0 V8 Turbo",
-        fuel: "AI-98",
-        type: "V8 Turbo",
-        volume: "4.0 L",
-        cylinders: 8,
-        power: 520,
-        mass: 260
-    },
-
-
-    /* ================= AI-100 ================= */
-
-    "I4-1.6-100": {
-        name: "1.6 I4 Turbo",
-        fuel: "AI-100",
-        type: "I4 Turbo",
-        volume: "1.6 L",
-        cylinders: 4,
-        power: 195,
-        mass: 150
-    },
-
-    "I4-2.0-100": {
-        name: "2.0 I4 Turbo",
-        fuel: "AI-100",
-        type: "I4 Turbo",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 270,
-        mass: 180
-    },
-
-    "I5-2.5-100": {
-        name: "2.5 I5 Turbo",
-        fuel: "AI-100",
-        type: "I5 Turbo",
-        volume: "2.5 L",
-        cylinders: 5,
-        power: 330,
-        mass: 200
-    },
-
-    "V6-3.0-100": {
-        name: "3.0 V6 Turbo",
-        fuel: "AI-100",
-        type: "V6 Turbo",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 420,
-        mass: 230
-    },
-
-    "V8-4.0-100": {
-        name: "4.0 V8 Turbo",
-        fuel: "AI-100",
-        type: "V8 Turbo",
-        volume: "4.0 L",
-        cylinders: 8,
-        power: 580,
-        mass: 265
-    },
-
-    "V12-6.0-100": {
-        name: "6.0 V12",
-        fuel: "AI-100",
-        type: "V12",
-        volume: "6.0 L",
-        cylinders: 12,
-        power: 700,
-        mass: 315
-    },
-
-
-    /* ================= DIESEL ================= */
-
-    "I4-1.6-DT": {
-        name: "1.6 I4 Diesel",
-        fuel: "ДТ",
-        type: "I4 Diesel",
-        volume: "1.6 L",
-        cylinders: 4,
-        power: 115,
-        mass: 155
-    },
-
-    "I4-2.0-DT": {
-        name: "2.0 I4 Diesel",
-        fuel: "ДТ",
-        type: "I4 Diesel",
-        volume: "2.0 L",
-        cylinders: 4,
-        power: 150,
-        mass: 175
-    },
-
-    "I4-2.2-DT": {
-        name: "2.2 I4 Diesel",
-        fuel: "ДТ",
-        type: "I4 Diesel",
-        volume: "2.2 L",
-        cylinders: 4,
-        power: 185,
-        mass: 185
-    },
-
-    "I6-3.0-DT": {
-        name: "3.0 I6 Diesel",
-        fuel: "ДТ",
-        type: "I6 Diesel",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 250,
-        mass: 220
-    },
-
-    "V6-3.0-DT": {
-        name: "3.0 V6 Diesel",
-        fuel: "ДТ",
-        type: "V6 Diesel",
-        volume: "3.0 L",
-        cylinders: 6,
-        power: 290,
-        mass: 230
-    },
-
-    "V8-4.0-DT": {
-        name: "4.0 V8 Diesel",
-        fuel: "ДТ",
-        type: "V8 Diesel",
-        volume: "4.0 L",
-        cylinders: 8,
-        power: 380,
-        mass: 270
-    }
-
-};
-
-
-/* =========================================================
-   ВЛИЯНИЕ ТОПЛИВА
-========================================================= */
-
-const fuelData = {
-
-    "AI-92": {
-        powerMultiplier: 0.96
-    },
-
-    "AI-95": {
-        powerMultiplier: 1.00
-    },
-
-    "AI-98": {
-        powerMultiplier: 1.04
-    },
-
-    "AI-100": {
-        powerMultiplier: 1.08
-    },
-
-    "ДТ": {
-        powerMultiplier: 1.00
-    }
-
-};
-
-
-/* =========================================================
-   ВЛИЯНИЕ ПРИВОДА
-========================================================= */
-
-const driveData = {
-
-    FWD: {
-        mass: 0,
-        accelerationBonus: 0,
-        powerMultiplier: 1.00
-    },
-
-    RWD: {
-        mass: 30,
-        accelerationBonus: -0.15,
-        powerMultiplier: 1.02
-    },
-
-    AWD: {
-        mass: 80,
-        accelerationBonus: -0.45,
-        powerMultiplier: 1.05
-    }
-
-};
-
-
-/* =========================================================
-   КОРОБКИ
-========================================================= */
-const gearboxData = {
-
-    AT: {
-        mass: 40,
-        accelerationBonus: 0
-    },
-
-    MT: {
-        mass: 0,
-        accelerationBonus: -0.35
-    },
-
-    CVT: {
-        mass: 20,
-        accelerationBonus: 0.25
-    }
-
-};
-
-
-/* =========================================================
-   ПОИСК ЭЛЕМЕНТОВ
-========================================================= */
-
-const bodyOptions =
-    document.querySelectorAll(".option");
-
-const fuelOptions =
-    document.querySelectorAll(".fuel");
-
-const driveOptions =
-    document.querySelectorAll(".drive-option");
-
-const gearboxOptions =
-    document.querySelectorAll(".gearbox");
-
-const powerDisplay =
-    document.querySelector(
-        ".power-card .big-number"
-    );
-
-const accelerationDisplay =
-    document.querySelector(
-        ".dashboard-card:nth-child(2) .big-number"
-    );
-
-const massDisplay =
-    document.querySelector(
-        ".dashboard-card:nth-child(3) .big-number"
-    );
-
-const driveDisplay =
-    document.querySelector(".drive-name");
-
-const selectedData =
-    document.querySelectorAll(
-        ".selected-data > div"
-    );
-
-const continueButton =
-    document.querySelector(
-        ".continue-button"
-    );
-
-const headerButton =
-    document.querySelector(
-        ".header-button"
-    );
-
-const buildName =
-    document.querySelector(
-        ".build-name h3"
-    );
-
-
-/* =========================================================
-   СОЗДАНИЕ БЛОКА ДВИГАТЕЛЕЙ
-========================================================= */
-
-function createEngineBlock() {
-
-    const constructorMain =
-        document.querySelector(
-            ".constructor-main"
-        );
-
-    if (!constructorMain) {
+    if (!container) {
+        console.error("Не найден элемент services-list в HTML");
         return;
     }
 
+    container.textContent = "Загружаем услуги...";
 
-    if (
-        document.querySelector(
-            ".engine-config-block"
-        )
-    ) {
+    const { data, error } = await db
+        .from("services")
+        .select("id, name, description, price, duration_minutes")
+        .eq("is_active", true)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error("Ошибка загрузки услуг:", error);
+        container.textContent = "Не удалось загрузить услуги.";
         return;
     }
 
+    container.replaceChildren();
 
-    const gearboxBlock =
-        document.querySelector(
-            ".gearbox-grid"
-        )?.closest(
-            ".config-block"
-        );
+    if (!data || data.length === 0) {
+        container.textContent =
+            "Пока нет доступных услуг. Скоро здесь появится каталог!";
+    } else {
+        data.forEach(function (service) {
+            const card = document.createElement("article");
+            card.className = "service-card";
 
+            const title = document.createElement("h3");
+            title.textContent = service.name;
 
-    if (!gearboxBlock) {
-        return;
+            const description = document.createElement("p");
+            description.textContent =
+                service.description || "Описание скоро появится";
+
+            const details = document.createElement("p");
+            details.className = "service-details";
+            details.textContent =
+                `${service.duration_minutes} мин. · ${service.price} ₽`;
+
+            card.append(title, description, details);
+            container.appendChild(card);
+        });
     }
 
+    if (serviceSelect) {
+        serviceSelect.replaceChildren();
 
-    const block =
-        document.createElement("div");
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Выберите услугу";
+        serviceSelect.appendChild(placeholder);
 
+        (data || []).forEach(function (service) {
+            const option = document.createElement("option");
+            option.value = service.id;
+            option.textContent =
+                `${service.name} — ${service.price} ₽ (${service.duration_minutes} мин.)`;
 
-    block.className =
-        "config-block engine-config-block";
+            serviceSelect.appendChild(option);
+        });
+    }
 
-
-    const title =
-        document.createElement("div");
-
-    title.className =
-        "config-title";
-
-
-    title.innerHTML =
-        "<div>" +
-        "<span>STEP 03</span>" +
-        "<h3>ДВИГАТЕЛЬ</h3>" +
-        "</div>" +
-        "<span class=\"required\">REQUIRED</span>";
-
-
-    block.appendChild(title);
-
-
-    const engineGrid =
-        document.createElement("div");
-
-
-    engineGrid.className =
-        "gearbox-grid engine-grid";
-
-
-    /*
-       Создаём только 6 двигателей,
-       соответствующих выбранному топливу.
-    */
-
-    createEngineCards(
-        engineGrid,
-        car.fuel
-    );
-
-
-    block.appendChild(
-        engineGrid
-    );
-
-
-    constructorMain.insertBefore(
-        block,
-        gearboxBlock
-    );
+    console.log("Услуги загружены:", data?.length || 0);
 }
 
 
-/* =========================================================
-   СОЗДАНИЕ КАРТОЧЕК ДВИГАТЕЛЕЙ
-========================================================= */
+// ========================================
+// ЗАГРУЗКА ИНФОРМАЦИИ О СТУДИИ
+// ========================================
 
-function createEngineCards(
-    container,
-    fuel
-) {
+async function loadStudioSettings() {
+    const { data, error } = await db
+        .from("site_settings")
+        .select("studio_name, description, address, confirmation_message")
+        .eq("id", 1)
+        .maybeSingle();
 
-    container.innerHTML = "";
+    if (error) {
+        console.error("Ошибка загрузки настроек:", error);
+        return;
+    }
 
+    if (!data) {
+        console.warn("Настройки студии пока не заполнены");
+        return;
+    }
 
-    let engines =
-        Object.keys(engineData)
-        .filter(function(id) {
+    const description = document.getElementById("studio-description");
+    const address = document.getElementById("studio-address");
 
-            return (
-                engineData[id].fuel === fuel
-            );
+    if (description && data.description) {
+        description.textContent = data.description;
+    }
 
-        });
+    if (address && data.address) {
+        address.textContent = data.address;
+    }
 
+    if (data.studio_name) {
+        document.title = data.studio_name;
+    }
 
-    engines.forEach(function(id) {
-
-        const engine =
-            engineData[id];
-
-
-        const card =
-            document.createElement("div");
-
-
-        card.className =
-            "gearbox engine-option";
-
-
-        if (
-            id === car.engine
-        ) {
-
-            card.classList.add(
-                "selected"
-            );
-        }
+    console.log("Информация о студии загружена");
+}
 
 
-        card.dataset.engine =
-            id;
+// ========================================
+// ДАТА: НЕ РАНЬШЕ СЕГОДНЯ
+// ========================================
 
+function getMoscowDate() {
+                const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Europe/Moscow",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).formatToParts(new Date());
 
-        const title =
-            document.createElement(
-                "strong"
-            );
+    const values = {};
 
-
-        title.textContent =
-            engine.name;
-
-
-        const stats =
-            document.createElement(
-                "span"
-            );
-
-
-        stats.textContent =
-          engine.power +
-            " HP / " +
-            engine.mass +
-            " KG";
-
-
-        const infoButton =
-            document.createElement(
-                "button"
-            );
-
-
-        infoButton.type =
-            "button";
-
-
-        infoButton.className =
-            "gear-info";
-
-
-        infoButton.textContent =
-            "?";
-
-
-        infoButton.dataset.info =
-            engine.name +
-            " • " +
-            engine.volume +
-            " • " +
-            engine.cylinders +
-            " цилиндров • " +
-            engine.power +
-            " л.с. • " +
-            engine.mass +
-            " кг";
-
-
-        card.appendChild(title);
-
-        card.appendChild(stats);
-
-        card.appendChild(infoButton);
-
-        container.appendChild(card);
+    parts.forEach(function (part) {
+        values[part.type] = part.value;
     });
 
-
-    addEngineListeners();
+    return `${values.year}-${values.month}-${values.day}`;
 }
 
 
-/* =========================================================
-   ПЕРЕСТРОЕНИЕ ДВИГАТЕЛЕЙ
-========================================================= */
+// ========================================
+// ФОРМАТИРОВАНИЕ ВРЕМЕНИ
+// ========================================
 
-function rebuildEngines() {
+function formatTime(dateString) {
+    return new Intl.DateTimeFormat("ru-RU", {
+        timeZone: "Europe/Moscow",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+    }).format(new Date(dateString));
+}
 
-    const grid =
-        document.querySelector(
-            ".engine-grid"
-        );
 
+// ========================================
+// ЗАГРУЗКА СВОБОДНОГО ВРЕМЕНИ
+// ========================================
 
-    if (!grid) {
+async function loadAvailableTimes() {
+    const serviceSelect = document.getElementById("booking-service");
+    const dateInput = document.getElementById("booking-date");
+    const timesContainer = document.getElementById("available-times");
+    const message = document.getElementById("booking-message");
+
+    if (!serviceSelect || !dateInput || !timesContainer) {
         return;
     }
 
+    // Сбрасываем ранее выбранное время
+    selectedStartAt = null;
+     const continueButton = document.getElementById("continue-booking");
+if (continueButton) continueButton.disabled = true;
 
-    /*
-       Если выбранный двигатель
-       не подходит новому топливу,
-       выбираем первый доступный.
-    */
+    if (message) {
+        message.textContent = "";
+    }
 
-    const available =
-        Object.keys(engineData)
-        .filter(function(id) {
+    const requestNumber = ++availableTimesRequest;
+    const serviceId = serviceSelect.value;
+    const date = dateInput.value;
 
-            return (
-                engineData[id].fuel ===
-                car.fuel
-            );
+    if (!serviceId || !date) {
+        timesContainer.textContent =
+            "Сначала выбери услугу и дату.";
+        return;
+    }
 
+    if (date < getMoscowDate()) {
+        timesContainer.textContent =
+            "Нельзя выбрать дату в прошлом.";
+        return;
+    }
+
+    timesContainer.textContent = "Ищем свободное время...";
+
+    const { data, error } = await db.rpc("get_available_times", {
+        p_service_id: serviceId,
+        p_date: date
+    });
+
+    // Не показываем ответ от устаревшего запроса
+    if (requestNumber !== availableTimesRequest) {
+        return;
+    }
+
+    if (error) {
+        console.error("Ошибка загрузки свободного времени:", error);
+        timesContainer.textContent =
+            "Не удалось загрузить время. Попробуй обновить страницу.";
+        return;
+    }
+
+    timesContainer.replaceChildren();
+
+    if (!data || data.length === 0) {
+        timesContainer.textContent =
+            "На эту дату свободного времени нет. Попробуй другой день.";
+        return;
+    }
+
+    data.forEach(function (slot) {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "time-option";
+        button.textContent = formatTime(slot.start_at);
+        button.setAttribute("aria-pressed", "false");
+
+        button.addEventListener("click", function () {
+    selectedStartAt = slot.start_at;
+
+    timesContainer.querySelectorAll(".time-option").forEach(function (otherButton) {
+        otherButton.classList.remove("selected");
+        otherButton.setAttribute("aria-pressed", "false");
+        otherButton.style.backgroundColor = "";
+        otherButton.style.color = "";
+        otherButton.style.borderColor = "";
+    });
+
+    button.classList.add("selected");
+    button.setAttribute("aria-pressed", "true");
+
+    button.style.backgroundColor = "#a66bb5";
+    button.style.color = "#ffffff";
+    button.style.borderColor = "#875095";
+
+    updateContinueButton();
+
+    if (message) {
+        message.textContent = "Выбрано время: " + formatTime(slot.start_at) + ".";
+    }
+
+    console.log("Выбрано время:", selectedStartAt);
+});
+
+        timesContainer.appendChild(button);
+    });
+
+    console.log("Свободное время загружено:", data.length);
+}
+
+
+// ========================================
+// НАСТРОЙКА ФОРМЫ ЗАПИСИ
+// ========================================
+
+function setupBookingForm() {
+    const serviceSelect = document.getElementById("booking-service");
+    const dateInput = document.getElementById("booking-date");
+
+    if (!serviceSelect || !dateInput) {
+        console.warn("Поля выбора услуги или даты не найдены");
+        return;
+    }
+     dateInput.min = getMoscowDate();
+
+    serviceSelect.addEventListener("change", loadAvailableTimes);
+    dateInput.addEventListener("change", loadAvailableTimes);
+}
+
+
+// ========================================
+// ЗАПУСК САЙТА
+// ========================================
+
+async function initSite() {
+    if (!window.supabase) {
+        console.error(
+            "Supabase не подключён. Проверь подключение библиотеки в index.html."
+        );
+        return;
+    }
+
+    setupBookingForm();
+
+    await Promise.all([
+        loadServices(),
+        loadStudioSettings()
+    ]);
+}
+document.addEventListener("DOMContentLoaded", function () {
+    initSite();
+    setupBookingConfirmation();
+});
+
+
+// ========================================
+// ПРЕДВАРИТЕЛЬНОЕ ПОДТВЕРЖДЕНИЕ ЗАПИСИ
+// ========================================
+
+function setupBookingConfirmation() {
+    const serviceSelect = document.getElementById("booking-service");
+    const dateInput = document.getElementById("booking-date");
+    const nameInput = document.getElementById("customer-name");
+    const phoneInput = document.getElementById("customer-phone");
+
+    const continueButton = document.getElementById("continue-booking");
+    const confirmation = document.getElementById("booking-confirmation");
+    const summary = document.getElementById("booking-summary");
+    const masterMessage = document.getElementById("master-confirmation-message");
+    const confirmButton = document.getElementById("confirm-booking");
+    const editButton = document.getElementById("edit-booking");
+    const status = document.getElementById("booking-message");
+
+    if (
+        !serviceSelect || !dateInput || !nameInput || !phoneInput ||
+        !continueButton || !confirmation || !summary ||
+        !masterMessage || !confirmButton || !editButton
+    ) {
+        console.error("Не найдены элементы подтверждения записи в HTML.");
+        return;
+    }
+
+    let settingsMessage = "Проверь данные перед подтверждением.";
+    let bookingInProgress = false;
+     function updateContinueButton() {
+    continueButton.disabled = !(
+        serviceSelect.value &&
+        dateInput.value &&
+        selectedStartAt &&
+        nameInput.value.trim() &&
+        phoneInput.value.trim()
+    );
+}
+
+[
+    serviceSelect,
+    dateInput,
+    nameInput,
+    phoneInput
+].forEach(function (field) {
+    field.addEventListener("input", updateContinueButton);
+    field.addEventListener("change", updateContinueButton);
+});
+
+    // Получаем сообщение мастера из настроек студии
+    async function loadConfirmationMessage() {
+        const { data, error } = await db
+            .from("site_settings")
+            .select("confirmation_message")
+            .eq("id", 1)
+            .maybeSingle();
+
+        if (!error && data && data.confirmation_message) {
+            settingsMessage = data.confirmation_message;
+        }
+
+        masterMessage.textContent = settingsMessage;
+    }
+
+    loadConfirmationMessage();
+
+    // Продолжить — показать сводку, но пока не создавать бронь
+    continueButton.addEventListener("click", function () {
+        if (bookingInProgress) return;
+
+        if (!serviceSelect.value || !dateInput.value || !selectedStartAt) {
+            status.textContent = "Сначала выбери услугу, дату и время.";
+            return;
+        }
+
+        if (!nameInput.value.trim() || !phoneInput.value.trim()) {
+            status.textContent = "Введи своё имя и номер телефона.";
+            return;
+        }
+
+        if (dateInput.value < getMoscowDate()) {
+            status.textContent = "Нельзя выбрать дату в прошлом.";
+            return;
+        }
+
+        const serviceName =
+            serviceSelect.options[serviceSelect.selectedIndex].textContent;
+
+        const startDate = new Date(selectedStartAt);
+
+        if (!Number.isFinite(startDate.getTime()) || startDate <= new Date()) {
+            status.textContent = "Выбранное время уже прошло. Выбери другое.";
+            return;
+        }
+
+        summary.replaceChildren();
+
+        const details = [
+            ["Услуга", serviceName],
+            ["Дата", new Intl.DateTimeFormat("ru-RU", {
+                timeZone: "Europe/Moscow",
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }).format(startDate)],
+            ["Время", formatTime(selectedStartAt)],
+            ["Имя", nameInput.value.trim()],
+            ["Телефон", phoneInput.value.trim()]
+        ];
+
+        details.forEach(function (item) {
+            const line = document.createElement("p");
+            const label = document.createElement("strong");
+            label.textContent = item[0] + ": ";
+
+            line.append(label, document.createTextNode(item[1]));
+            summary.appendChild(line);
         });
 
-
-    if (
-        !available.includes(
-            car.engine
-        )
-    ) {
-
-        car.engine =
-            available[0];
-    }
-
-
-    createEngineCards(
-        grid,
-        car.fuel
-    );
-}
-
-
-/* =========================================================
-   ОБРАБОТКА ДВИГАТЕЛЕЙ
-========================================================= */
-
-function addEngineListeners() {
-
-    const engineOptions =
-        document.querySelectorAll(
-            ".engine-option"
-        );
-
-
-    engineOptions.forEach(
-        function(engine) {
-
-            engine.addEventListener(
-                "click",
-                function(event) {
-
-                    if (
-                        event.target.classList.contains(
-                            "gear-info"
-                        )
-                    ) {
-                        return;
-                    }
-
-
-                    engineOptions.forEach(
-                        function(item) {
-
-                            item.classList.remove(
-                                "selected"
-                            );
-
-                        }
-                    );
-
-
-                    engine.classList.add(
-                        "selected"
-                    );
-
-
-                    car.engine =
-                        engine.dataset.engine;
-
-
-                    updateCar();
-                }
-            );
-        }
-    );
-
-
-    const infoButtons =
-        document.querySelectorAll(
-            ".engine-option .gear-info"
-        );
-
-
-    infoButtons.forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.stopPropagation();
-
-
-                    const parent =
-                        button.closest(
-                            ".gearbox"
-                        );
-
-
-                    if (!parent) {
-                        return;
-                    }
-
-
-                    const old =
-                        parent.querySelector(
-                            ".gear-description"
-                        );
-
-
-                    if (old) {
-
-                        old.remove();
-
-                        return;
-                    }
-
-
-                    document
-                        .querySelectorAll(
-                            ".gear-description"
-                        )
-                        .forEach(
-                            function(item) {
-
-                                item.remove();
-
-                            }
-    );
-
-
-                    const description =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    description.className =
-                        "gear-description";
-
-
-                    description.textContent =
-                        button.dataset.info;
-
-
-                    parent.appendChild(
-                        description
-                    );
-                }
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   СОЗДАЁМ ДВИГАТЕЛИ
-========================================================= */
-
-createEngineBlock();
-
-
-/* =========================================================
-   РАСЧЁТ АВТОМОБИЛЯ
-========================================================= */
-
-function updateCar() {
-
-    const body =
-        bodyData[car.body];
-
-    const engine =
-        engineData[car.engine];
-
-    const fuel =
-        fuelData[car.fuel];
-
-    const drive =
-        driveData[car.drive];
-
-    const gearbox =
-        gearboxData[car.gearbox];
-
-
-    if (
-        !body ||
-        !engine ||
-        !fuel ||
-        !drive ||
-        !gearbox
-    ) {
-
-        return;
-    }
-
-
-    /* =====================================================
-       ИТОГОВАЯ МОЩНОСТЬ
-    ===================================================== */
-
-    let power =
-        engine.power *
-        fuel.powerMultiplier;
-
-
-    /*
-       Привод тоже влияет
-       на итоговую отдачу.
-    */
-
-    power =
-        power *
-        drive.powerMultiplier;
-
-
-    power =
-        Math.round(power);
-
-
-    /* =====================================================
-       ИТОГОВАЯ МАССА
-    ===================================================== */
-
-    const mass =
-        body.mass +
-        engine.mass +
-        drive.mass +
-        gearbox.mass;
-
-
-    /* =====================================================
-       РАЗГОН
-    ===================================================== */
-
-    let acceleration =
-        body.baseAcceleration;
-
-
-    /*
-       Чем выше отношение
-       мощности к массе,
-       тем быстрее машина.
-    */
-
-    const powerToMass =
-        power / mass;
-
-
-    const performance =
-        powerToMass * 100;
-
-
-    acceleration -=
-        performance * 0.055;
-
-
-    /*
-       Влияние привода.
-    */
-
-    acceleration +=
-        drive.accelerationBonus;
-
-
-    /*
-       Влияние коробки.
-    */
-
-    acceleration +=
-        gearbox.accelerationBonus;
-
-
-    /*
-       Более тяжёлый двигатель
-       немного ухудшает разгон.
-    */
-
-    if (engine.mass > 250) {
-
-        acceleration += 0.15;
-    }
-
-
-    /*
-       Ограничение.
-    */
-
-    acceleration =
-        Math.max(
-            2.8,
-            acceleration
-        );
-
-
-    acceleration =
-        Math.min(
-            15.0,
-            acceleration
-        );
-
-
-    /* =====================================================
-       DASHBOARD
-    ===================================================== */
-
-    if (powerDisplay) {
-
-        powerDisplay.textContent =
-            power;
-    }
-
-
-    if (accelerationDisplay) {
-
-        accelerationDisplay.textContent =
-            acceleration.toFixed(1);
-    }
-
-
-    if (massDisplay) {
-
-        massDisplay.textContent =
-            mass;
-    }
-
-
-    if (driveDisplay) {
-
-        driveDisplay.textContent =
-            car.drive;
-    }
-
-
-    /* =====================================================
-       ПРАВАЯ ПАНЕЛЬ
-    ===================================================== */
-
-    if (
-        selectedData.length >= 4
-    ) {
-
-        selectedData[0]
-            .querySelector("strong")
-            .textContent =
-            car.body;
-
-
-        selectedData[1]
-            .querySelector("strong")
-            .textContent =
-            car.fuel;
-
-
-        selectedData[2]
-            .querySelector("strong")
-            .textContent =
-            car.drive;
-
-
-        selectedData[3]
-            .querySelector("strong")
-    .textContent =
-            car.gearbox;
-    }
-
-
-    if (buildName) {
-
-        buildName.textContent =
-            "PROJECT CC-001";
-    }
-
-
-    /*
-       Сохраняем конфигурацию.
-    */
-
-    localStorage.setItem(
-        "carConstructor",
-        JSON.stringify(car)
-    );
-}
-
-
-/* =========================================================
-   ВЫБОР КУЗОВА
-========================================================= */
-
-bodyOptions.forEach(
-    function(option) {
-
-        option.addEventListener(
-            "click",
-            function() {
-
-                bodyOptions.forEach(
-                    function(item) {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    }
-                );
-
-
-                option.classList.add(
-                    "selected"
-                );
-
-
-                const strong =
-                    option.querySelector(
-                        "strong"
-                    );
-
-
-                if (strong) {
-
-                    car.body =
-                        strong.textContent
-                        .trim()
-                        .toUpperCase();
-                }
-
-
-                updateCar();
-            }
-        );
-    }
-);
-
-
-/* =========================================================
-   ВЫБОР ТОПЛИВА
-========================================================= */
-
-fuelOptions.forEach(
-    function(option) {
-
-        option.addEventListener(
-            "click",
-            function() {
-
-                fuelOptions.forEach(
-                    function(item) {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    }
-                );
-
-
-                option.classList.add(
-                    "selected"
-                );
-
-
-                const strong =
-                    option.querySelector(
-                        "strong"
-                    );
-
-
-                if (!strong) {
-                    return;
-                }
-
-
-                const value =
-                    strong.textContent
-                    .trim()
-                    .toUpperCase();
-
-
-                if (value === "92") {
-
-                    car.fuel =
-                        "AI-92";
-
-                }
-
-                else if (value === "95") {
-
-                    car.fuel =
-                        "AI-95";
-
-                }
-
-                else if (value === "98") {
-
-                    car.fuel =
-                        "AI-98";
-
-                }
-
-                else if (value === "100") {
-
-                    car.fuel =
-                        "AI-100";
-
-                }
-
-                else if (
-                    value === "ДТ" ||
-                    value === "DIESEL"
-                ) {
-
-                    car.fuel =
-                        "ДТ";
-                }
-
-
-                /*
-                   Меняем список двигателей
-                   под новое топливо.
-                */
-
-                rebuildEngines();
-
-
-                updateCar();
-            }
-        );
-    }
-);
-
-
-/* =========================================================
-   ВЫБОР ПРИВОДА
-========================================================= */
-
-driveOptions.forEach(
-    function(option) {
-
-        option.addEventListener(
-            "click",
-            function() {
-
-                driveOptions.forEach(
-                    function(item) {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    }
-                );
-
-
-                option.classList.add(
-                    "selected"
-                );
-
-
-                const strong =
-                    option.querySelector(
-                        "strong"
-                    );
-
-
-                if (strong) {
-
-                    car.drive =
-                        strong.textContent
-                        .trim()
-    .toUpperCase();
-                }
-
-
-                updateCar();
-            }
-        );
-    }
-);
-
-
-/* =========================================================
-   ВЫБОР КОРОБКИ
-========================================================= */
-
-gearboxOptions.forEach(
-    function(option) {
-
-        option.addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target.classList.contains(
-                        "gear-info"
-                    )
-                ) {
-                    return;
-                }
-
-
-                gearboxOptions.forEach(
-                    function(item) {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    }
-                );
-
-
-                option.classList.add(
-                    "selected"
-                );
-
-
-                const strong =
-                    option.querySelector(
-                        "strong"
-                    );
-
-
-                if (strong) {
-
-                    car.gearbox =
-                        strong.textContent
-                        .trim()
-                        .toUpperCase();
-                }
-
-
-                updateCar();
-            }
-        );
-    }
-);
-
-
-/* =========================================================
-   ИНФОРМАЦИЯ О КОРОБКЕ
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".gearbox:not(.engine-option) .gear-info"
-    )
-    .forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.stopPropagation();
-
-
-                    const parent =
-                        button.closest(
-                            ".gearbox"
-                        );
-
-
-                    if (!parent) {
-                        return;
-                    }
-
-
-                    const old =
-                        parent.querySelector(
-                            ".gear-description"
-                        );
-
-
-                    if (old) {
-
-                        old.remove();
-
-                        return;
-                    }
-
-
-                    document
-                        .querySelectorAll(
-                            ".gear-description"
-                        )
-                        .forEach(
-                            function(item) {
-
-                                item.remove();
-
-                            }
-                        );
-
-
-                    const description =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    description.className =
-                        "gear-description";
-
-
-                    description.textContent =
-                        button.dataset.info;
-
-
-                    parent.appendChild(
-                        description
-                    );
-                }
-            );
-        }
-    );
-
-
-/* =========================================================
-   НОВЫЙ АВТОМОБИЛЬ
-========================================================= */
-
-if (headerButton) {
-
-    headerButton.addEventListener(
-        "click",
-        function() {
-
-            car.body =
-                "SEDAN";
-
-            car.fuel =
-                "AI-92";
-
-            car.engine =
-                "I4-1.6-92";
-
-            car.drive =
-                "FWD";
-
-            car.gearbox =
-                "AT";
-
-
-            /*
-               Кузов
-            */
-
-            bodyOptions.forEach(
-                function(item) {
-
-                    item.classList.remove(
-                        "selected"
-                    );
-
-                }
-            );
-
-
-            if (bodyOptions[0]) {
-
-                bodyOptions[0]
-                    .classList.add(
-                        "selected"
-                    );
-            }
-    /*
-               Топливо
-            */
-
-            fuelOptions.forEach(
-                function(item) {
-
-                    item.classList.remove(
-                        "selected"
-                    );
-
-                }
-            );
-
-
-            if (fuelOptions[0]) {
-
-                fuelOptions[0]
-                    .classList.add(
-                        "selected"
-                    );
-            }
-
-
-            /*
-               Привод
-            */
-
-            driveOptions.forEach(
-                function(item) {
-
-                    item.classList.remove(
-                        "selected"
-                    );
-
-                }
-            );
-
-
-            if (driveOptions[0]) {
-
-                driveOptions[0]
-                    .classList.add(
-                        "selected"
-                    );
-            }
-
-
-            /*
-               Коробка
-            */
-
-            gearboxOptions.forEach(
-                function(item) {
-
-                    item.classList.remove(
-                        "selected"
-                    );
-
-                }
-            );
-
-
-            if (gearboxOptions[0]) {
-
-                gearboxOptions[0]
-                    .classList.add(
-                        "selected"
-                    );
-            }
-
-
-            /*
-               Перестраиваем двигатели.
-            */
-
-            rebuildEngines();
-
-
-            updateCar();
-        }
-    );
-}
-
-
-/* =========================================================
-   КНОПКА ПРОДОЛЖИТЬ
-========================================================= */
-
-if (continueButton) {
-
-    continueButton.addEventListener(
-        "click",
-        function() {
-
-            const constructor =
-                document.querySelector(
-                    "#constructor"
-                );
-
-
-            if (constructor) {
-
-                constructor.scrollIntoView({
-                    behavior: "smooth"
-                });
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   ЗАГРУЗКА СОХРАНЁННОЙ МАШИНЫ
-========================================================= */
-
-const savedCar =
-    localStorage.getItem(
-        "carConstructor"
-    );
-
-
-if (savedCar) {
-
-    try {
-
-        const saved =
-            JSON.parse(savedCar);
-
-
-        if (
-            saved.body &&
-            bodyData[saved.body]
-        ) {
-
-            car.body =
-                saved.body;
+        masterMessage.textContent = settingsMessage;
+        confirmation.hidden = false;
+        status.textContent = "";
+        confirmation.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    // Вернуться к форме
+     editButton.addEventListener("click", function () {
+        confirmation.hidden = true;
+        status.textContent = "";
+    });
+
+    // Окончательное создание брони
+    confirmButton.addEventListener("click", async function () {
+        if (bookingInProgress) return;
+
+        if (!selectedStartAt || !serviceSelect.value) {
+            status.textContent = "Выбери услугу и время заново.";
+            confirmation.hidden = true;
+            return;
         }
 
-
-        if (
-            saved.fuel &&
-            fuelData[saved.fuel]
-        ) {
-
-            car.fuel =
-                saved.fuel;
+        if (!nameInput.value.trim() || !phoneInput.value.trim()) {
+            status.textContent = "Заполни имя и телефон.";
+            confirmation.hidden = true;
+            return;
         }
 
+        bookingInProgress = true;
+        confirmButton.disabled = true;
+        confirmButton.textContent = "Сохраняем запись...";
 
-        if (
-            saved.engine &&
-            engineData[saved.engine]
-        ) {
+        try {
+            const { data, error } = await db.rpc("create_booking", {
+                p_service_id: serviceSelect.value,
+                p_customer_name: nameInput.value.trim(),
+                p_customer_phone: phoneInput.value.trim(),
+                p_start_at: selectedStartAt
+            });
 
-            car.engine =
-                saved.engine;
-        }
-        if (
-            saved.drive &&
-            driveData[saved.drive]
-        ) {
-            car.drive =
-                saved.drive;
-        }
-        if (
-            saved.gearbox &&
-            gearboxData[saved.gearbox]
-        ) {
-            car.gearbox =
-                saved.gearbox;
-        }
-    }
-    catch (error) {
-        console.log(
-            "Ошибка загрузки сохранённого автомобиля."
-        );
-    }
-}
-/* =========================================================
-   ВОССТАНОВЛЕНИЕ ВЫБОРА
-========================================================= */
-function restoreSelection() {
-    /*
-       Кузов
-    */
-    bodyOptions.forEach(
-        function(option) {
-            const strong =
-                option.querySelector(
-                    "strong"
-                );
-            if (
-                strong &&
-                strong.textContent
-                    .trim()
-                    .toUpperCase() ===
-                    car.body
-            ) {
-                option.classList.add(
-                    "selected"
-                );
-            }
-            else {
-                option.classList.remove(
-                    "selected"
-                );
-                 }
-        }
-    );
-    /*
-       Топливо
-    */
-    fuelOptions.forEach(
-        function(option) {
-            const strong =
-                option.querySelector(
-                    "strong"
-                );
-            if (!strong) {
+            if (error) {
+                console.error("Ошибка создания записи:", error);
+
+                status.textContent =
+                    "Не удалось подтвердить запись. Возможно, время уже занято. Обнови свободное время и попробуй снова.";
+
+                confirmation.hidden = true;
+                await loadAvailableTimes();
                 return;
             }
-            const value =
-                strong.textContent
-                .trim()
-                .toUpperCase();
-            let fuelName = "";
-            if (value === "92") {
-                fuelName =
-                    "AI-92";
-            }
-            else if (value === "95") {
-                fuelName =
-                    "AI-95";
-            }
-            else if (value === "98") {
-                fuelName =
-                    "AI-98";
-            }
-            else if (value === "100") {
-                fuelName =
-                    "AI-100";
-            }
-            else if (
-                value === "ДТ" ||
-                value === "DIESEL"
-            ) {
-                fuelName =
-                    "ДТ";
-            }
-            if (
-                fuelName === car.fuel
-            ) {
-                option.classList.add(
-                    "selected"
-                );
 
+            status.textContent =
+                "Запись сохранена! Спасибо. Если мастер должен дополнительно связаться с тобой, дождись подтверждения.";
+
+            confirmation.hidden = true;
+            selectedStartAt = null;
+            serviceSelect.value = "";
+            dateInput.value = "";
+            nameInput.value = "";
+            phoneInput.value = "";
+
+            const timesContainer = document.getElementById("available-times");
+            if (timesContainer) {
+                timesContainer.textContent =
+                    "Запись оформлена. Для новой записи выбери услугу и дату.";
             }
-            else {
-                option.classList.remove(
-                    "selected"
-                );
-            }
+
+            console.log("Запись создана в Supabase:", data);
+        } catch (error) {
+            console.error("Ошибка подтверждения:", error);
+            status.textContent =
+                "Произошла ошибка. Проверь подключение и попробуй снова.";
+        } finally {
+            bookingInProgress = false;
+            confirmButton.disabled = false;
+            confirmButton.textContent = "Подтвердить запись →";
         }
-    );
-    /*
-       Привод
-    */
-    driveOptions.forEach(
-        function(option) {
-            const strong =
-                option.querySelector(
-                    "strong"
-                );
-            if (
-                strong &&
-                strong.textContent
-                    .trim()
-                    .toUpperCase() ===
-                    car.drive
-            ) {
-                option.classList.add(
-                    "selected"
-                );
-            }
-            else {
-                option.classList.remove(
-                    "selected"
-                );
-            }
-        }
-    );
-    /*
-       Коробка
-    */
-    gearboxOptions.forEach(
-        function(option) {
-            const strong =
-                option.querySelector(
-                    "strong"
-                );
-            if (
-                strong &&
-                strong.textContent
-                    .trim()
-                    .toUpperCase() ===
-                    car.gearbox
-            ) {
-                option.classList.add(
-                    "selected"
-                );
-            }
-            else {
-                option.classList.remove(
-                    "selected"
-                );
-            }
-        }
-    );
+    });
 }
-restoreSelection();
-rebuildEngines();
-updateCar();  

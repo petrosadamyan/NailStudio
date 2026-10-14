@@ -3,653 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarConstructor — Конструктор автомобилей</title>
+
+    <meta name="theme-color" content="#fbf5ff">
+    <meta name="description"
+          content="Онлайн-запись на маникюр. Выберите услугу и удобное время.">
+
+    <title>Nail Studio — запись на маникюр</title>
+
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
+
     <div class="background-glow glow-one"></div>
     <div class="background-glow glow-two"></div>
+
     <header class="header">
-        <div class="logo">
-            <div class="logo-mark">CC</div>
-            <div class="logo-text">
-                <strong>CAR</strong>CONSTRUCTOR
-                <small>AUTOMOTIVE CONFIGURATOR</small>
-            </div>
-        </div>
+        <a href="#home" class="logo">
+            <span class="logo-icon">✿</span>
+            <span>NAIL STUDIO</span>
+        </a>
+
         <nav class="navigation">
-            <a href="#home" class="active">
-                Главная
-            </a>
-            <a href="#constructor">
-                Конструктор
-            </a>
-            <a href="#specifications">
-                Характеристики
-            </a>
-            <a href="#about">
-                О проекте
-            </a>
+            <a href="#home">Главная</a>
+            <a href="#services">Услуги</a>
+            <a href="#about">О мастере</a>
+            <a href="#contacts">Контакты</a>
         </nav>
-        <button class="header-button">
-            <span>+</span>
-            Новый автомобиль
-        </button>
+
+        <a href="#booking" class="header-button">
+            Записаться
+        </a>
     </header>
+
     <main>
-        <section class="hero" id="home">
-            <div class="hero-left">
-                <div class="status-line">
-                    <span class="status-dot"></span>
-                    ONLINE CONFIGURATOR
-                    <span class="status-number">
-                        01
-                    </span>
-                </div>
+
+        <!-- Главный экран -->
+
+        <section class="hero section" id="home">
+
+            <div class="hero-content">
+                <span class="eyebrow">
+                    YOUR BEAUTY MOMENT
+                </span>
+
                 <h1>
-                    СОЗДАЙ
-                    <span>СВОЙ</span>
-                    АВТОМОБИЛЬ
+                    Время для себя.
+                    <span>Время для красоты.</span>
                 </h1>
+
                 <p class="hero-description">
-                    Интерактивный конструктор автомобиля,
-                    в котором каждая деталь зависит от вашего выбора.
+                    Маникюр с заботой о каждой детали.
+                    Выберите удобное время и запишитесь
+                    онлайн всего за несколько минут.
                 </p>
-                <div class="hero-buttons">
-                    <a href="#constructor" class="primary-button">
-                        НАЧАТЬ СБОРКУ
-                        <span>→</span>
-                    </a>
-                    <a href="#specifications" class="outline-button">
-                        ХАРАКТЕРИСТИКИ
-                    </a>
-                </div>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <strong>04</strong>
-                        <span>
-                            этапа<br>
-                            сборки
-                        </span>
-                    </div>
-                    <div class="hero-stat">
-                        <strong>05</strong>
-                        <span>
-                            типов<br>
-                            топлива
-                        </span>
-                    </div>
-                    <div class="hero-stat">
-                        <strong>∞</strong>
-                        <span>
-                            вариантов<br>
-                            конфигурации
-                        </span>
-                    </div>
+
+                <a href="#booking" class="primary-button">
+                    Записаться на маникюр
+                    <span>↗</span>
+                </a>
+
+                <div class="hero-note">
+                    <span class="status-dot"></span>
+                    Онлайн-запись в любое время
                 </div>
             </div>
-            <div class="hero-right">
-                <div class="car-number">
-                    CC / 001
+
+            <div class="hero-decoration" aria-hidden="true">
+                <div class="decor-circle circle-one"></div>
+                <div class="decor-circle circle-two"></div>
+
+                <div class="flower flower-one">✿</div>
+                <div class="flower flower-two">✧</div>
+                <div class="flower flower-three">✿</div>
+
+                <div class="decor-card">
+                    <span class="decor-card-icon">♡</span>
+                    <span>Твоя минута красоты</span>
                 </div>
-                <div class="car-stage">
-                    <div class="car-glow"></div>
-                    <div class="car">
-                        <div class="car-roof"></div>
-                        <div class="car-window"></div>
-                        <div class="car-window-divider"></div>
-                        <div class="car-body">
-                            <div class="car-line"></div>
-                             <div class="front-light"></div>
-                            <div class="front-bumper"></div>
-                        </div>
-                        <div class="wheel wheel-left">
-                            <div class="wheel-center"></div>
-                        </div>
-                        <div class="wheel wheel-right">
-                            <div class="wheel-center"></div>
-                        </div>
-                    </div>
-                    <div class="road-light"></div>
-                </div>
-                <div class="car-info-widget">
-                    <div>
-                        <small>MODEL</small>
-                        <strong>YOUR BUILD</strong>
-                    </div>
-                    <div>
-                        <small>STATUS</small>
-                        <strong class="online">
-                            READY
-                        </strong>
-                    </div>
-                    <div>
-                        <small>BUILD</small>
-                        <strong>
-                            CC-001
-                        </strong>
-                    </div>
-                </div>
+            </div>
+
+        </section>
+
+        <!-- Преимущества -->
+
+        <section class="advantages section">
+            <div class="advantage-card">
+                <span class="advantage-icon">✧</span>
+                <h3>Внимание к деталям</h3>
+                <p>Забота и аккуратность в каждой процедуре.</p>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">♡</span>
+                <h3>Удобная запись</h3>
+                <p>Выбирайте подходящую дату и время.</p>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">✿</span>
+                <h3>Уютная атмосфера</h3>
+                <p>Время, посвящённое только себе.</p>
             </div>
         </section>
-        <section class="dashboard" id="specifications">
-            <div class="section-header">
-                <div>
-                    <span class="section-number">
-                        01 / DASHBOARD
-                    </span>
-                    <h2>
-                        ПАНЕЛЬ
-                        <span>АВТОМОБИЛЯ</span>
-                    </h2>
-                </div>
+
+        <!-- Услуги и цены -->
+
+        <section class="section services-section" id="services">
+            <div class="section-heading">
+                <span class="eyebrow">НАШИ УСЛУГИ</span>
+                <h2>Выбери свою процедуру</h2>
                 <p>
-                    Основные параметры выбранной
-                    конфигурации автомобиля.
+                    Стоимость и продолжительность
+                    каждой услуги указаны отдельно.
                 </p>
             </div>
-            <div class="dashboard-grid">
-                <div class="dashboard-card power-card">
-                    <div class="card-heading">
-                        <span>
-                            POWER
-                        </span>
-                        <b>
-                            HP
-                        </b>
-                    </div>
-                    <div class="big-number">
-                        000
-                    </div>
-                    <div class="card-line"></div>
-                    <small>
-                        МОЩНОСТЬ ДВИГАТЕЛЯ
-                    </small>
-                </div>
-                <div class="dashboard-card">
-                    <div class="card-heading">
-                        <span>
-                            0 — 100
-                        </span>
-                        <b>
-                            SEC
-                        </b>
-                    </div>
-                    <div class="big-number">
-                        —.—
-                    </div>
-                    <div class="card-line"></div>
-                    <small>
-                        РАЗГОН ДО 100 КМ/Ч
-                    </small>
-                </div>
-                <div class="dashboard-card">
-                    <div class="card-heading">
-                        <span>
-                            MASS
-                        </span>
-                        <b>
-                            KG
-                        </b>
-                    </div>
-                    <div class="big-number">
-                        0000
-                    </div>
-                    <div class="card-line"></div>
-                    <small>
-                        МАССА АВТОМОБИЛЯ
-                    </small>
-                </div>
-                <div class="dashboard-card drive-card">
-                     <div class="card-heading">
-                        <span>
-                            DRIVE
-                        </span>
-                        <b>
-                            TYPE
-                        </b>
-                    </div>
-                    <div class="drive-icon">
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <strong class="drive-name">
-                        ---
-                    </strong>
-                    <small>
-                        ТИП ПРИВОДА
-                    </small>
+
+            <div id="services-list" class="services-list">
+                <div class="loading-message">
+                    Загружаем услуги...
                 </div>
             </div>
         </section>
-        <section class="constructor" id="constructor">
-            <div class="section-header">
-                <div>
-                    <span class="section-number">
-                        02 / CONFIGURATOR
-                    </span>
-                    <h2>
-                        СОБЕРИ
-                        <span>АВТОМОБИЛЬ</span>
-                    </h2>
-                </div>
-                <div class="progress">
-                    <span>
-                        BUILD PROGRESS
-                    </span>
-                    <div class="progress-bar">
-                        <div></div>
-                    </div>
-                    <strong>
-                        01 / 04
-                    </strong>
-                </div>
-            </div>
-            <div class="constructor-grid">
-                <div class="constructor-main">
-                    <div class="config-block">
-                        <div class="config-title">
-                            <div>
-                                <span>
-                                    STEP 01
-                                </span>
-                                <h3>
-                                    ТИП КУЗОВА
-                                </h3>
-                            </div>
-                            <span class="required">
-                                REQUIRED
-                            </span>
-                        </div>
-                        <div class="option-grid">
-                            <div class="option selected">
-                                <div class="option-icon">
-                                    ◈
-                                </div>
-                                <strong>
-                                    SEDAN
-                                </strong>
-                                <small>
-                                    Седан
-                                </small>
-                            </div>
-                            <div class="option">
-                                <div class="option-icon">
-                                    ◇
-                                </div>
-                                <strong>
-                                    COUPE
-                                </strong>
-                                <small>
-                                    Купе
-                                </small>
-                            </div>
-                            <div class="option">
-                                <div class="option-icon">
-                                    ▱
-                                </div>
-                                <strong>
-                                    SUV
-                                </strong>
-                                <small>
-                                    Кроссовер
-                                </small>
-                            </div>
-                            <div class="option">
-                                <div class="option-icon">
-                                    ▰
-                                </div>
-                                <strong>
-                                     WAGON
-                                </strong>
-                                <small>
-                                    Универсал
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="config-block">
-                        <div class="config-title">
-                            <div>
-                                <span>
-                                    STEP 02
-                                </span>
-                                <h3>
-                                    ТОПЛИВО
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="fuel-grid">
-                            <div class="fuel selected">
-                                <strong>92</strong>
-                                <small>AI</small>
-                            </div>
-                            <div class="fuel">
-                                <strong>95</strong>
-                                <small>AI</small>
-                            </div>
-                            <div class="fuel">
-                                <strong>98</strong>
-                                <small>AI</small>
-                            </div>
-                            <div class="fuel">
-                                <strong>100</strong>
-                                <small>AI</small>
-                            </div>
-                            <div class="fuel">
-                                <strong>ДТ</strong>
-                                <small>DIESEL</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="config-block">
-                        <div class="config-title">
-                            <div>
-                                <span>
-                                    STEP 03
-                                </span>
-                                <h3>
-                                    ПРИВОД
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="drive-options">
-                            <div class="drive-option selected">
-                                <div class="drive-visual">
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <div>
-                                    <strong>
-                                        FWD
-                                    </strong>
-                                    <small>
-                                        Передний
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="drive-option">
-                                <div class="drive-visual">
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <div>
-                                    <strong>
-                                        RWD
-                                    </strong>
-                                    <small>
-                                        Задний
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="drive-option">
-                                <div class="drive-visual">
-                                    <span></span>
-                                    <span></span>
-                                    <i></i>
-                                </div>
-                                 <div>
-                                    <strong>
-                                        AWD
-                                    </strong>
-                                    <small>
-                                        Полный
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="config-block">
-                        <div class="config-title">
-                            <div>
-                                <span>
-                                    STEP 04
-                                </span>
-                                <h3>
-                                    КОРОБКА ПЕРЕДАЧ
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="gearbox-grid">
-                            <div class="gearbox">
-    <strong>
-        AT
-    </strong>
-    <span>
-        AUTOMATIC
-    </span>
-    <button class="gear-info" type="button" data-info="Автоматическая коробка передач. Передачи переключаются самостоятельно.">
-        ?
-    </button>
-</div>
-<div class="gearbox">
-    <strong>
-        MT
-    </strong>
-    <span>
-        MANUAL
-    </span>
-    <button class="gear-info" type="button" data-info="Механическая коробка передач. Водитель самостоятельно переключает передачи.">
-        ?
-    </button>
-</div>
-<div class="gearbox">
-    <strong>
-        CVT
-    </strong>
-    <span>
-        VARIATOR
-    </span>
-    <button class="gear-info" type="button" data-info="Вариатор. Плавно изменяет передаточное отношение без фиксированных передач.">
-        ?
-    </button>
-</div>
-                        </div>
-                    </div>
-                </div>
-                <aside class="build-panel">
-                    <div class="panel-top">
-                        <span>
-                            CURRENT BUILD
-                        </span>
-                        <div class="panel-status">
-                            <i></i>
-                            ACTIVE
-                        </div>
-                    </div>
-                   <div class="mini-car">
-    <div class="mini-car-roof"></div>
-    <div class="mini-car-window"></div>
-    <div class="mini-car-window-divider"></div>
 
-    <div class="mini-car-body">
-        <div class="mini-car-line"></div>
-        <div class="mini-front-light"></div>
-        <div class="mini-front-bumper"></div>
-    </div>
+        <!-- О мастере -->
 
-    <div class="mini-wheel mini-wheel-left">
-        <div class="mini-wheel-center"></div>
-    </div>
+        <section class="section about-section" id="about">
+             <div class="about-decoration" aria-hidden="true">
+                <span>♡</span>
+                <span>✿</span>
+                <span>✧</span>
+            </div>
 
-    <div class="mini-wheel mini-wheel-right">
-        <div class="mini-wheel-center"></div>
-    </div>
-</div>
-                    <div class="build-name">
-                        <small>
-                            YOUR AUTOMOBILE
-                        </small>
-                        <h3>
-                            PROJECT CC-001
-                        </h3>
-                    </div>
-                    <div class="selected-data">
-                        <div>
-                            <span>
-                                КУЗОВ
-                            </span>
-                            <strong>
-                                SEDAN
-                            </strong>
-                        </div>
-                        <div>
-                            <span>
-                                ТОПЛИВО
-                            </span>
-                            <strong>
-                                AI-92
-                            </strong>
-                        </div>
-                        <div>
-                            <span>
-                                ПРИВОД
-                            </span>
-                            <strong>
-                                FWD
-                            </strong>
-                        </div>
-                         <div>
-                            <span>
-                                КОРОБКА
-                            </span>
-                            <strong>
-                                AT
-                            </strong>
-                        </div>
-                    </div>
-                    <button class="continue-button">
-                        ПРОДОЛЖИТЬ
-                        <span>
-                            →
-                        </span>
-                    </button>
-                </aside>
-            </div>
-        </section>
-        <section class="features">
-            <div class="section-header">
-                <div>
-                    <span class="section-number">
-                        03 / FEATURES
-                    </span>
-                    <h2>
-                        ВСЁ ПОД
-                        <span>КОНТРОЛЕМ</span>
-                    </h2>
-                </div>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-number">
-                        01
-                    </div>
-                    <div class="feature-icon">
-                        ◉
-                    </div>
-                    <h3>
-                        REAL-TIME
-                    </h3>
-                    <p>
-                        Характеристики автомобиля
-                        будут изменяться в зависимости
-                        от выбранных параметров.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-number">
-                        02
-                    </div>
-                    <div class="feature-icon">
-                        ◈
-                    </div>
-                    <h3>
-                        SMART BUILD
-                    </h3>
-                    <p>
-                        Система будет автоматически
-                        учитывать совместимость
-                        выбранных компонентов.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-number">
-                        03
-                    </div>
-                    <div class="feature-icon">
-                        ◎
-                    </div>
-                    <h3>
-                        CUSTOM
-                    </h3>
-                    <p>
-                        Пользователь сможет создать
-                        собственную конфигурацию
-                        автомобиля.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-number">
-                        04
-                    </div>
-                    <div class="feature-icon">
-                        ⬡
-                    </div>
-                    <h3>
-                        FINAL BUILD
-                    </h3>
-                    <p>
-                        В конце сборки пользователь
-                        получит готовый автомобиль
-                        со всеми характеристиками.
-                    </p>
-                </div>
-            </div>
-        </section>
-        <section class="about" id="about">
             <div class="about-content">
-                <span class="section-number">
-                    04 / ABOUT PROJECT
-                </span>
-                <h2>
-                    CAR<span>CONSTRUCTOR</span>
-                </h2>
-                <p>
-                    CarConstructor — индивидуальный
-                    школьный проект, посвящённый созданию
-                    интерактивного веб-конструктора автомобилей.
+                <span class="eyebrow">НЕМНОГО О НАС</span>
+                <h2>Красота начинается с заботы</h2>
+
+                <p id="studio-description">
+                    Здесь будет описание мастера,
+                    её подхода к работе и атмосферы студии.
+                    Текст можно будет изменить через админ-панель.
                 </p>
-                <p>
-                     Проект разрабатывается с использованием
-                    HTML, CSS и JavaScript. Пользователь сможет
-                    самостоятельно собрать автомобиль,
-                    выбирая различные параметры и компоненты.
-                </p>
-            </div>
-            <div class="about-card">
-                <span>
-                    PROJECT
-                </span>
-                <strong>
-                    CC
-                </strong>
-                <small>
-                    2026 / 10 CLASS
-                </small>
             </div>
         </section>
+
+        <!-- Адрес -->
+
+        <section class="section contacts-section" id="contacts">
+            <div class="section-heading">
+                <span class="eyebrow">МЫ ЖДЁМ ТЕБЯ</span>
+                <h2>Как нас найти</h2>
+                <p>Приходи в удобное для тебя время по записи.</p>
+            </div>
+
+            <div class="address-card">
+                <span class="address-icon">⌖</span>
+
+                <div>
+                    <h3>Адрес студии</h3>
+                    <p id="studio-address">
+                        Адрес будет добавлен мастером.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Онлайн-запись -->
+
+        <section class="section booking-section" id="booking">
+            <div class="section-heading">
+                <span class="eyebrow">ONLINE BOOKING</span>
+                <h2>Запишись на удобное время</h2>
+                <p>
+                    Выбери услугу, дату и свободный интервал.
+                </p>
+            </div>
+
+            <div class="booking-card">
+
+                <div class="form-group">
+                    <label for="booking-service">Услуга</label>
+                    <select id="booking-service" required>
+                        <option value="">Сначала выбери услугу</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="booking-date">Дата посещения</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Свободное время</label>
+                    <div id="available-times" class="available-times">
+                        Сначала выбери услугу и дату.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer-name">Твоё имя</label>
+                    <input
+                        type="text"
+                        id="customer-name"
+                        placeholder="Как к тебе обращаться?"
+                        maxlength="100"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="customer-phone">Номер телефона</label>
+                    <input
+                        type="tel"
+                        id="customer-phone"
+                        placeholder="+7 ..."
+                        maxlength="30"
+                        autocomplete="tel"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="button"
+                    id="continue-booking"
+                    class="primary-button booking-button"
+                    disabled
+                >
+                    Продолжить запись
+                    <span>→</span>
+                </button>
+
+                <p class="form-note">
+                    Перед окончательным подтверждением
+                    ты сможешь прочитать сообщение мастера.
+                </p>
+
+                <div id="booking-message" role="status"></div>
+                 <div id="booking-success-popup" class="booking-success-popup" hidden>
+  <div class="success-popup-card">
+    <button type="button" id="close-success-popup" class="success-popup-close" aria-label="Закрыть">×</button>
+
+    <div class="success-checkmark">
+      <svg viewBox="0 0 52 52" aria-hidden="true">
+        <circle class="success-circle" cx="26" cy="26" r="23" fill="none" />
+        <path class="success-check" fill="none" d="M14 27 L22 35 L38 18" />
+      </svg>
+    </div>
+
+    <h3>Вы записаны!</h3>
+    <p class="success-popup-text">
+      Ваша запись успешно сохранена.
+    </p>
+
+    <div id="success-booking-details" class="success-booking-details"></div>
+
+    <button type="button" id="success-popup-done" class="primary-button booking-button">
+      Отлично!
+    </button>
+  </div>
+</div>
+                 <div id="booking-confirmation" class="booking-confirmation" hidden>
+    <h3>Проверь свою запись</h3>
+
+    <div id="booking-summary"></div>
+
+    <p id="master-confirmation-message"></p>
+
+    <button
+        type="button"
+        id="confirm-booking"
+        class="primary-button booking-button"
+    >
+        Подтвердить запись →
+    </button>
+
+    <button
+        type="button"
+        id="edit-booking"
+        class="secondary-button"
+    >
+        Вернуться и изменить
+    </button>
+</div>
+
+            </div>
+        </section>
+
     </main>
-    <footer>
-        <div class="footer-logo">
-            CARCONSTRUCTOR
-        </div>
-        <div>
-            INDIVIDUAL PROJECT / 2026
-        </div>
-        <div>
-            CC-001
-        </div>
+
+    <footer class="footer">
+        <a href="#home" class="logo">
+             <span class="logo-icon">✿</span>
+            <span>NAIL STUDIO</span>
+        </a>
+
+        <p>Маленькое время для себя ♡</p>
+
+        <a href="#booking">Онлайн-запись</a>
     </footer>
-     <script src="script.js"></script>
+
 </body>
 </html>
