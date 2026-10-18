@@ -11,14 +11,17 @@
     <title>Nail Studio — запись на маникюр</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js" defer></script>
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
     <div class="background-glow glow-one"></div>
     <div class="background-glow glow-two"></div>
+
+    <!-- Шапка -->
 
     <header class="header">
         <a href="#home" class="logo">
@@ -90,6 +93,7 @@
         <!-- Преимущества -->
 
         <section class="advantages section">
+
             <div class="advantage-card">
                 <span class="advantage-icon">✧</span>
                 <h3>Внимание к деталям</h3>
@@ -107,14 +111,17 @@
                 <h3>Уютная атмосфера</h3>
                 <p>Время, посвящённое только себе.</p>
             </div>
+
         </section>
 
         <!-- Услуги и цены -->
 
         <section class="section services-section" id="services">
+
             <div class="section-heading">
                 <span class="eyebrow">НАШИ УСЛУГИ</span>
                 <h2>Выбери свою процедуру</h2>
+
                 <p>
                     Стоимость и продолжительность
                     каждой услуги указаны отдельно.
@@ -126,12 +133,62 @@
                     Загружаем услуги...
                 </div>
             </div>
+             </section>
+
+        <!-- Telegram-канал -->
+
+        <section class="section telegram-section" id="telegram">
+
+            <div class="telegram-card">
+
+                <div class="telegram-image">
+                    <img
+                        src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&amp;fit=crop&amp;w=800&amp;q=85"
+                        alt="Маникюр для вдохновения"
+                        loading="lazy"
+                    >
+                    <span class="telegram-image-decoration">♡</span>
+                </div>
+
+                <div class="telegram-content">
+
+                    <span class="eyebrow">
+                        NAIL STUDIO ♡ TELEGRAM
+                    </span>
+
+                    <h2>Больше красоты в Telegram</h2>
+
+                    <p>
+                        Заглядывай в наш канал за вдохновением,
+                        новостями, красивыми идеями для маникюра
+                        и актуальной информацией.
+                    </p>
+
+                    <a
+                        href="https://t.me/nogti_pilka361"
+                        class="telegram-button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Перейти в Telegram
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <span class="telegram-note">
+                        Немного красоты — каждый день ♡
+                    </span>
+
+                </div>
+
+            </div>
+
         </section>
 
         <!-- О мастере -->
 
         <section class="section about-section" id="about">
-             <div class="about-decoration" aria-hidden="true">
+
+            <div class="about-decoration" aria-hidden="true">
                 <span>♡</span>
                 <span>✿</span>
                 <span>✧</span>
@@ -139,6 +196,7 @@
 
             <div class="about-content">
                 <span class="eyebrow">НЕМНОГО О НАС</span>
+
                 <h2>Красота начинается с заботы</h2>
 
                 <p id="studio-description">
@@ -147,11 +205,13 @@
                     Текст можно будет изменить через админ-панель.
                 </p>
             </div>
+
         </section>
 
         <!-- Адрес -->
 
         <section class="section contacts-section" id="contacts">
+
             <div class="section-heading">
                 <span class="eyebrow">МЫ ЖДЁМ ТЕБЯ</span>
                 <h2>Как нас найти</h2>
@@ -163,19 +223,25 @@
 
                 <div>
                     <h3>Адрес</h3>
+
                     <p id="studio-address">
-                          Московская область,  городской округ Люберцы,  посёлок городского типа Октябрьский,  улица Ленина, дом 25.
+                        Московская область, городской округ Люберцы,
+                        посёлок городского типа Октябрьский,
+                        улица Ленина, дом 25.
                     </p>
                 </div>
             </div>
+
         </section>
 
         <!-- Онлайн-запись -->
 
         <section class="section booking-section" id="booking">
+
             <div class="section-heading">
                 <span class="eyebrow">ONLINE BOOKING</span>
                 <h2>Запишись на удобное время</h2>
+
                 <p>
                     Выбери услугу, дату и свободный интервал.
                 </p>
@@ -185,6 +251,7 @@
 
                 <div class="form-group">
                     <label for="booking-service">Услуга</label>
+
                     <select id="booking-service" required>
                         <option value="">Сначала выбери услугу</option>
                     </select>
@@ -192,11 +259,17 @@
 
                 <div class="form-group">
                     <label for="booking-date">Дата посещения</label>
-                    <input type="date" id="booking-date" required>
+
+                    <input
+                        type="date"
+                        id="booking-date"
+                           required
+                    >
                 </div>
 
                 <div class="form-group">
                     <label>Свободное время</label>
+
                     <div id="available-times" class="available-times">
                         Сначала выбери услугу и дату.
                     </div>
@@ -204,6 +277,7 @@
 
                 <div class="form-group">
                     <label for="customer-name">Твоё имя</label>
+
                     <input
                         type="text"
                         id="customer-name"
@@ -216,6 +290,7 @@
 
                 <div class="form-group">
                     <label for="customer-phone">Номер телефона</label>
+
                     <input
                         type="tel"
                         id="customer-phone"
@@ -242,67 +317,124 @@
                 </p>
 
                 <div id="booking-message" role="status"></div>
-                 <div id="booking-success-popup" class="booking-success-popup" hidden>
-  <div class="success-popup-card">
-    <button type="button" id="close-success-popup" class="success-popup-close" aria-label="Закрыть">×</button>
 
-    <div class="success-checkmark">
-      <svg viewBox="0 0 52 52" aria-hidden="true">
-        <circle class="success-circle" cx="26" cy="26" r="23" fill="none" />
-        <path class="success-check" fill="none" d="M14 27 L22 35 L38 18" />
-      </svg>
-    </div>
+                <!-- Подтверждение записи -->
 
-    <h3>Вы записаны!</h3>
-    <p class="success-popup-text">
-      Ваша запись успешно сохранена.
-    </p>
+                <div id="booking-confirmation"
+                     class="booking-confirmation"
+                     hidden>
 
-    <div id="success-booking-details" class="success-booking-details"></div>
+                    <h3>Проверь свою запись</h3>
 
-    <button type="button" id="success-popup-done" class="primary-button booking-button">
-      Отлично!
-    </button>
-  </div>
-</div>
-                 <div id="booking-confirmation" class="booking-confirmation" hidden>
-    <h3>Проверь свою запись</h3>
+                    <div id="booking-summary"></div>
 
-    <div id="booking-summary"></div>
+                    <p id="master-confirmation-message"></p>
 
-    <p id="master-confirmation-message"></p>
+                    <button
+                        type="button"
+                        id="confirm-booking"
+                        class="primary-button booking-button"
+                    >
+                        Подтвердить запись →
+                    </button>
 
-    <button
-        type="button"
-        id="confirm-booking"
-        class="primary-button booking-button"
-    >
-        Подтвердить запись →
-    </button>
+                    <button
+                        type="button"
+                        id="edit-booking"
+                        class="secondary-button"
+                    >
+                        Вернуться и изменить
+                    </button>
 
-    <button
-        type="button"
-        id="edit-booking"
-        class="secondary-button"
-    >
-        Вернуться и изменить
-    </button>
-</div>
+                </div>
 
             </div>
+
         </section>
+
+        <!-- Окно успешной записи -->
+
+        <div
+            id="booking-success-popup"
+            class="booking-success-popup"
+            hidden
+        >
+
+            <div class="success-popup-card">
+
+                <button
+                    type="button"
+                    id="close-success-popup"
+                    class="success-popup-close"
+                    aria-label="Закрыть"
+                >
+                    ×
+                </button>
+
+                <div class="success-checkmark">
+                    <svg viewBox="0 0 52 52" aria-hidden="true">
+                        <circle
+                            class="success-circle"
+                            cx="26"
+                            cy="26"
+                            r="23"
+                            fill="none"
+                        />
+
+                        <path
+                            class="success-check"
+                            fill="none"
+                            d="M14 27 L22 35 L38 18"
+                        />
+                    </svg>
+                </div>
+
+                <h3>Вы записаны!</h3>
+
+                <p class="success-popup-text">
+                    Ваша запись успешно сохранена.
+                </p>
+
+                <div
+                     id="success-booking-details"
+                    class="success-booking-details"
+                ></div>
+
+                <button
+                    type="button"
+                    id="success-popup-done"
+                    class="primary-button booking-button"
+                >
+                    Отлично!
+                </button>
+
+            </div>
+
+        </div>
 
     </main>
 
+    <!-- Подвал -->
+
     <footer class="footer">
+
         <a href="#home" class="logo">
-             <span class="logo-icon">✿</span>
+            <span class="logo-icon">✿</span>
             <span>NAIL STUDIO</span>
         </a>
 
         <p>Маленькое время для себя ♡</p>
 
         <a href="#booking">Онлайн-запись</a>
+
+        <a
+            href="https://t.me/nogti_pilka361"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Мы в Telegram ↗
+        </a>
+
     </footer>
 
 </body>
