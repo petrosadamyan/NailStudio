@@ -1432,3 +1432,48 @@ select:focus-visible {
         transform: none;
     }
 }
+/* Кнопка карт возле адреса */
+
+.address-content {
+    min-width: 0;
+}
+
+.address-map-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    margin-top: 14px;
+    padding: 12px 18px;
+
+    color: #ffffff;
+    background: linear-gradient(135deg, #bb82df, #9060c6);
+
+    border-radius: 13px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    box-shadow: 0 6px 18px rgba(144, 96, 198, 0.18);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.address-map-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(144, 96, 198, 0.27);
+}
+
+.address-map-button span:last-child {
+    font-size: 17px;
+}
+
+@media (max-width: 480px) {
+    .address-map-button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
