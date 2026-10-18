@@ -1,0 +1,726 @@
+/* ========================================
+   NAILSTUDIO — ADMIN PANEL
+   Pink • Lavender • White
+======================================== */
+
+:root {
+    --admin-pink: #e9a6c7;
+    --admin-pink-dark: #c85b98;
+    --admin-pink-light: #fff0f7;
+    --admin-purple: #9870c9;
+    --admin-purple-dark: #7950ad;
+    --admin-lavender: #f1e9ff;
+    --admin-white: #ffffff;
+    --admin-text: #392b40;
+    --admin-muted: #88798f;
+    --admin-border: #f0ddea;
+    --admin-shadow: 0 12px 35px rgba(129, 76, 124, 0.09);
+    --admin-radius: 22px;
+}
+
+/* Основная страница */
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--admin-text);
+    background:
+        radial-gradient(ellipse at 8% 5%, rgba(248, 204, 228, .65), transparent 35%),
+        radial-gradient(ellipse at 95% 25%, rgba(213, 197, 255, .5), transparent 32%),
+        linear-gradient(145deg, #fff8fc 0%, #fff4fa 48%, #f8f3ff 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    transition:
+        background .22s ease,
+        color .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        transform .22s ease,
+        opacity .22s ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(152, 112, 201, .28);
+    outline-offset: 3px;
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Контейнер */
+
+.admin-page {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    padding: 38px 24px 64px;
+    animation: admin-appear .55s ease both;
+}
+
+@keyframes admin-appear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Верхние подписи */
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 10px;
+    color: var(--admin-pink-dark);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--admin-pink-dark), var(--admin-purple));
+    box-shadow: 0 0 0 4px rgba(220, 151, 198, .15);
+}
+
+/* Заголовки */
+
+.admin-page h1,
+.admin-page h2,
+.admin-page h3 {
+    color: var(--admin-text);
+    line-height: 1.25;
+}
+
+.admin-page h1 {
+    margin: 4px 0 10px;
+    font-size: clamp(27px, 4vw, 37px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.admin-page h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -.4px;
+}
+
+.admin-page h3 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.admin-page p {
+    color: #746579;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.admin-note {
+    color: var(--admin-muted);
+    font-size: 13px;
+}
+
+/* Карточки */
+
+.admin-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+    padding: 30px;
+    border: 1px solid rgba(236, 208, 230, .9);
+    border-radius: var(--admin-radius);
+    background: rgba(255, 255, 255, .88);
+    box-shadow: var(--admin-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: box-shadow .25s ease, border-color .25s ease;
+}
+
+.admin-card:hover {
+    border-color: #e9c8e1;
+    box-shadow: 0 16px 42px rgba(129, 76, 124, .12);
+}
+
+.admin-card > :last-child {
+    margin-bottom: 0;
+}
+
+/* Экран входа */
+
+.admin-login {
+    width: 100%;
+    max-width: 440px;
+    margin: clamp(35px, 10vh, 100px) auto;
+    padding: 38px;
+    border-color: rgba(238, 198, 225, .95);
+    box-shadow: 0 25px 70px rgba(158, 97, 151, .14);
+}
+.admin-login::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #ed9ec5, #b18ae1, #ed9ec5);
+}
+
+.admin-login h1 {
+    margin-top: 5px;
+}
+
+.admin-login > p {
+    margin-bottom: 22px;
+}
+
+/* Верхняя панель */
+
+.admin-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 8px 2px 18px;
+}
+
+.admin-top > div {
+    min-width: 0;
+}
+
+.admin-top h1 {
+    margin-bottom: 5px;
+}
+
+.admin-top p {
+    margin: 0;
+}
+
+.admin-top > button {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 11px 19px;
+    border: 1px solid #efd7e8;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .85);
+    color: #a14e83;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-top > button:hover {
+    border-color: #dca6cb;
+    background: #fff0f8;
+    transform: translateY(-2px);
+}
+
+/* Навигация */
+
+.admin-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0 28px;
+    padding: 7px;
+    border: 1px solid rgba(236, 211, 233, .8);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .7);
+    box-shadow: 0 6px 20px rgba(129, 76, 124, .05);
+}
+
+.admin-nav button {
+    flex: 1 1 150px;
+    min-height: 46px;
+    padding: 12px 18px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    background: transparent;
+    color: #77657f;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-nav button:hover:not(.active) {
+    background: var(--admin-pink-light);
+    color: var(--admin-pink-dark);
+}
+
+.admin-nav button.active {
+    border-color: transparent;
+    background: linear-gradient(120deg, #d984b5, #9875cc);
+    color: #fff;
+    box-shadow: 0 5px 14px rgba(164, 99, 164, .23);
+}
+
+.admin-nav button.active:hover {
+    box-shadow: 0 8px 20px rgba(164, 99, 164, .3);
+    transform: translateY(-1px);
+}
+
+/* Формы */
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+}
+
+.admin-form label {
+    display: block;
+    margin: 17px 0 8px;
+    color: #59445f;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-form input:not([type="checkbox"]),
+.admin-form select,
+.admin-form textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 47px;
+    padding: 12px 14px;
+    border: 1px solid #ead9e8;
+    border-radius: 12px;
+    background: #fffafd;
+    color: var(--admin-text);
+    font-size: 15px;
+    line-height: 1.4;
+    box-shadow: 0 2px 5px rgba(80, 40, 80, .025);
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.admin-form textarea {
+    min-height: 105px;
+    resize: vertical;
+}
+
+.admin-form input:not([type="checkbox"]):hover,
+.admin-form select:hover,
+.admin-form textarea:hover {
+    border-color: #d9b8d9;
+}
+
+.admin-form input:not([type="checkbox"]):focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+    border-color: var(--admin-purple);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(152, 112, 201, .12);
+    outline: none;
+}
+
+.admin-form input::placeholder,
+.admin-form textarea::placeholder {
+    color: #b5a5b9;
+}
+
+.admin-form input[type="date"],
+.admin-form input[type="time"] {
+    min-height: 49px;
+}
+
+/* Кнопки действий */
+
+.admin-form button,
+.admin-action,
+.admin-login .primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    gap: 8px;
+    min-height: 45px;
+    margin-top: 17px;
+    padding: 12px 19px;
+    border: 1px solid #e6cde2;
+    border-radius: 12px;
+    background: #fff3fa;
+    color: #a14e83;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.35;
+    text-align: center;
+    cursor: pointer;
+}
+
+.admin-form button:hover:not(:disabled),
+.admin-action:hover:not(:disabled) {
+    border-color: #d6a5cf;
+    background: #fbe5f3;
+    box-shadow: 0 5px 14px rgba(171, 102, 157, .12);
+     transform: translateY(-2px);
+}
+
+.admin-form .primary-button,
+.admin-login .primary-button {
+    width: 100%;
+    min-height: 49px;
+    margin-top: 23px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(120deg, #d984b5, #9875cc);
+    color: #fff;
+    box-shadow: 0 7px 18px rgba(163, 100, 164, .2);
+}
+
+.admin-form .primary-button:hover:not(:disabled),
+.admin-login .primary-button:hover:not(:disabled) {
+    background: linear-gradient(120deg, #ce70a8, #8961bd);
+    box-shadow: 0 10px 23px rgba(163, 100, 164, .29);
+    transform: translateY(-2px);
+}
+
+.admin-form button:active,
+.admin-action:active,
+.admin-top > button:active,
+.admin-nav button:active {
+    transform: scale(.98);
+}
+
+/* Чекбокс активности услуги */
+
+.admin-form label.admin-service-active {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px;
+    border: 1px solid #f0d9e9;
+    border-radius: 12px;
+    background: #fff6fb;
+    line-height: 1.5;
+}
+
+.admin-service-active input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 1px 0 0;
+    accent-color: var(--admin-purple);
+}
+
+/* Списки и карточки записей */
+
+.admin-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.admin-item {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid #efdeed;
+    border-radius: 16px;
+    background: linear-gradient(140deg, #fff 0%, #fff9fd 100%);
+    box-shadow: 0 4px 14px rgba(110, 70, 110, .04);
+    overflow-wrap: anywhere;
+    animation: item-appear .3s ease both;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.admin-item:hover {
+    border-color: #e3c2df;
+    box-shadow: 0 8px 22px rgba(110, 70, 110, .08);
+    transform: translateY(-2px);
+}
+
+@keyframes item-appear {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-item h3 {
+    margin-bottom: 13px;
+}
+
+.admin-item p {
+    margin: 7px 0;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.admin-item strong {
+    color: var(--admin-purple-dark);
+    font-size: 15px;
+}
+
+.admin-item button {
+    margin: 12px 8px 0 0;
+}
+
+/* Сообщения и статусы */
+
+.admin-message {
+    min-height: 0;
+    margin: 16px 0 0;
+    padding: 0;
+    color: #775b80;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.admin-message:not(:empty) {
+    padding: 12px 14px;
+    border: 1px solid #eedbed;
+    border-radius: 11px;
+    background: #fff5fb;
+}
+
+.admin-note {
+    margin-top: 18px;
+    color: var(--admin-muted);
+}
+
+/* Разделители */
+
+.admin-page hr {
+    height: 1px;
+    margin: 26px 0 12px;
+    border: 0;
+    background: linear-gradient(90deg, transparent, #ead5e8, transparent);
+}
+
+/* Фильтры дат */
+
+#schedule-filter-form,
+#bookings-filter-form {
+    padding: 17px;
+    border: 1px solid #f0dfed;
+    border-radius: 15px;
+    background: #fff9fd;
+}
+
+#schedule-filter-form label,
+#bookings-filter-form label {
+    margin-top: 0;
+}
+
+#schedule-filter-form button,
+#bookings-filter-form button,
+#refresh-bookings,
+#refresh-services {
+    margin-right: 7px;
+}
+
+/* Скрытые разделы — не показываем до выбора */
+
+.admin-section[hidden],
+[hidden] {
+    display: none !important;
+}
+
+/* Улучшенная прокрутка */
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20px;
+}
+
+/* Планшеты */
+
+@media (max-width: 800px) {
+    .admin-page {
+        padding: 28px 18px 48px;
+    }
+
+    .admin-card {
+        padding: 25px;
+    }
+
+    .admin-top {
+        align-items: flex-start;
+    }
+
+    .admin-nav {
+        gap: 7px;
+    }
+
+    .admin-nav button {
+        flex-basis: 130px;
+        padding: 12px 10px;
+    }
+}
+
+/* Телефоны */
+
+@media (max-width: 600px) {
+    .admin-page {
+        padding: 20px 13px 36px;
+    }
+
+    .admin-page h1 {
+        font-size: 28px;
+        letter-spacing: -.7px;
+    }
+
+    .admin-page h2 {
+         font-size: 20px;
+    }
+
+    .admin-card {
+        margin-bottom: 17px;
+        padding: 21px 17px;
+        border-radius: 19px;
+    }
+
+    .admin-login {
+        margin: 5vh auto;
+        padding: 28px 21px;
+    }
+
+    .admin-top {
+        gap: 13px;
+        padding: 4px 2px 13px;
+    }
+
+    .admin-top > div {
+        flex: 1 1 100%;
+    }
+
+    .admin-top > button {
+        width: 100%;
+    }
+
+    .admin-nav {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 7px;
+        margin: 12px 0 20px;
+        padding: 6px;
+        border-radius: 15px;
+    }
+
+    .admin-nav button {
+        width: 100%;
+        min-height: 45px;
+        flex: auto;
+    }
+
+    .admin-form label {
+        margin-top: 15px;
+    }
+
+    .admin-form input:not([type="checkbox"]),
+    .admin-form select,
+    .admin-form textarea {
+        font-size: 16px;
+    }
+
+    .admin-form button,
+    .admin-action,
+    .admin-login .primary-button {
+        min-height: 47px;
+        padding: 12px 14px;
+    }
+
+    .admin-form button,
+    .admin-action {
+        max-width: 100%;
+    }
+
+    #schedule-filter-form,
+    #bookings-filter-form {
+        padding: 14px;
+    }
+
+    #schedule-filter-form button,
+    #bookings-filter-form button,
+    #refresh-bookings,
+    #refresh-services {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .admin-item {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .admin-item button {
+        width: 100%;
+        margin: 12px 0 0;
+    }
+
+    .admin-item p {
+        font-size: 13px;
+    }
+
+    .admin-form label.admin-service-active {
+        align-items: flex-start;
+    }
+}
+
+/* Учитываем настройки уменьшения анимации на устройстве */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
