@@ -11,7 +11,6 @@ const $ = (id) => document.getElementById(id);
 const loginScreen = $("admin-login-screen");
 const dashboard = $("admin-dashboard");
 const loginForm = $("admin-login-form");
-const loginMessage = $("admin-login-message");
 
 let currentSection = "schedule";
 
@@ -159,9 +158,9 @@ loginForm.addEventListener("submit", async function (event) {
     try {
         const { error: loginError } =
             await adminDb.auth.signInWithPassword({
-                 email,
+                email,
                 password
-            });
+                 });
 
         if (loginError) {
             throw new Error(
@@ -287,8 +286,6 @@ $("schedule-form").addEventListener("submit", async function (event) {
     showMessage("schedule-message", "Сохраняем интервал...");
 
     try {
-        // Проверяем, не пересекается ли новый интервал
-        // с уже существующими рабочими интервалами.
         const { data: existing, error: readError } = await adminDb
             .from("work_slots")
             .select("id,start_at,end_at")
@@ -305,7 +302,6 @@ $("schedule-form").addEventListener("submit", async function (event) {
             );
         }
 
-        // Каждый рабочий промежуток сохраняется отдельной строкой.
         const { error: insertError } = await adminDb
             .from("work_slots")
             .insert({
@@ -313,7 +309,8 @@ $("schedule-form").addEventListener("submit", async function (event) {
                 end_at: endAt,
                 is_open: true
             });
-         if (insertError) {
+
+        if (insertError) {
             throw insertError;
         }
 
@@ -321,8 +318,7 @@ $("schedule-form").addEventListener("submit", async function (event) {
             "schedule-message",
             `Интервал ${start}–${end} успешно добавлен!`
         );
-
-        $("schedule-view-date").value = date;
+         $("schedule-view-date").value = date;
 
         await loadSchedule();
     } catch (error) {
@@ -438,9 +434,7 @@ async function loadSchedule() {
             ? "schedule-status schedule-status-open"
             : "schedule-status schedule-status-closed";
 
-        status.textContent = slot.is_open
-            ? "Открыт"
-            : "Закрыт";
+        status.textContent = slot.is_open ? "Открыт" : "Закрыт";
 
         header.appendChild(status);
         item.appendChild(header);
@@ -473,14 +467,93 @@ async function loadSchedule() {
                 async () => {
                     await reopenSlot(slot);
                 },
-                 "admin-action schedule-open-button"
+                "admin-action schedule-open-button"
             );
         }
+
+        // НОВАЯ КНОПКА УДАЛЕНИЯ
+        addButton(
+            actions,
+            "Удалить интервал",
+            async () => {
+                 await deleteSlot(slot);
+            },
+            "admin-action schedule-delete-button"
+        );
 
         item.appendChild(actions);
         list.appendChild(item);
     });
 }
+
+// -------------------- УДАЛЕНИЕ ИНТЕРВАЛА --------------------
+
+async function deleteSlot(slot) {
+    const start = formatMoscowTime(slot.start_at);
+    const end = formatMoscowTime(slot.end_at);
+    const date = formatMoscowDate(slot.start_at);
+
+    const confirmed = confirm(
+        `Удалить рабочий интервал ${start}–${end} на ${date}?\n\n` +
+        "Это действие нельзя отменить."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    showMessage(
+        "schedule-message",
+        "Проверяем, нет ли записей на это время..."
+    );
+
+    try {
+        // Не удаляем интервал, если в нём есть подтверждённая запись.
+        const { data: bookings, error: bookingError } = await adminDb
+            .from("bookings")
+            .select("id")
+            .eq("status", "confirmed")
+            .lt("start_at", slot.end_at)
+            .gt("end_at", slot.start_at);
+
+        if (bookingError) {
+            throw bookingError;
+        }
+
+        if (bookings && bookings.length > 0) {
+            showMessage(
+                "schedule-message",
+                "Удаление невозможно: на это время есть подтверждённая запись клиента."
+            );
+            return;
+        }
+
+        const { error: deleteError } = await adminDb
+            .from("work_slots")
+            .delete()
+            .eq("id", slot.id);
+
+        if (deleteError) {
+            throw deleteError;
+        }
+
+        showMessage(
+            "schedule-message",
+            `Интервал ${start}–${end} удалён.`
+        );
+
+        await loadSchedule();
+    } catch (error) {
+        console.error("Delete slot error:", error);
+
+        showMessage(
+            "schedule-message",
+            "Не удалось удалить интервал: " + error.message
+        );
+    }
+}
+
+// -------------------- ЗАКРЫТИЕ ИНТЕРВАЛА --------------------
 
 async function closeSlot(slot) {
     if (!confirm("Закрыть этот интервал для новых записей?")) {
@@ -531,6 +604,8 @@ async function closeSlot(slot) {
     await loadSchedule();
 }
 
+// -------------------- ПОВТОРНОЕ ОТКРЫТИЕ --------------------
+
 async function reopenSlot(slot) {
     const { error } = await adminDb
         .from("work_slots")
@@ -560,11 +635,9 @@ $("bookings-filter-form").addEventListener(
     async function (event) {
         event.preventDefault();
 
-        const date = $("bookings-filter-date").value;
-        await loadBookings(date);
+        await loadBookings($("bookings-filter-date").value);
     }
 );
-
 $("clear-bookings-filter").addEventListener("click", async function () {
     $("bookings-filter-date").value = "";
     await loadBookings("");
@@ -642,7 +715,7 @@ async function loadBookings(
             item,
             "p",
             `${formatMoscowDate(booking.start_at)}, ${formatMoscowTime(booking.start_at)} — ${formatMoscowTime(booking.end_at)}`
-             );
+        );
 
         addTextElement(
             item,
@@ -689,10 +762,7 @@ async function loadBookings(
                 return;
             }
 
-            showMessage(
-                "bookings-message",
-                "Запись удалена."
-            );
+            showMessage("bookings-message", "Запись удалена.");
 
             await loadBookings($("bookings-filter-date").value);
         });
@@ -716,7 +786,7 @@ async function loadServices() {
     }
 
     list.replaceChildren();
-    showMessage("services-message", "Загружаем услуги...");
+     showMessage("services-message", "Загружаем услуги...");
 
     const { data, error } = await adminDb
         .from("services")
@@ -742,11 +812,7 @@ async function loadServices() {
         const item = document.createElement("article");
         item.className = "admin-item";
 
-        addTextElement(
-            item,
-            "h3",
-            service.name || "Услуга"
-        );
+        addTextElement(item, "h3", service.name || "Услуга");
 
         addTextElement(
             item,
@@ -785,7 +851,8 @@ async function loadServices() {
             $("service-duration").value =
                 service.duration_minutes ?? 60;
             $("service-active").checked = Boolean(service.is_active);
-             $("save-service").textContent = "Сохранить изменения";
+
+            $("save-service").textContent = "Сохранить изменения";
             $("cancel-service-edit").hidden = false;
 
             $("service-form").scrollIntoView({
@@ -823,10 +890,7 @@ async function loadServices() {
 
             cancelServiceEdit();
 
-            showMessage(
-                "services-message",
-                "Услуга удалена."
-            );
+            showMessage("services-message", "Услуга удалена.");
 
             await loadServices();
         });
@@ -850,10 +914,7 @@ async function saveService(event) {
     };
 
     if (!service.name) {
-        showMessage(
-            "services-message",
-            "Укажи название услуги."
-        );
+        showMessage("services-message", "Укажи название услуги.");
         return;
     }
 
@@ -865,18 +926,14 @@ async function saveService(event) {
         service.duration_minutes % 15 !== 0
     ) {
         showMessage(
-            "services-message",
+             "services-message",
             "Проверь цену и длительность. Длительность должна быть кратна 15 минутам."
         );
         return;
     }
 
     $("save-service").disabled = true;
-
-    showMessage(
-        "services-message",
-        "Сохраняем услугу..."
-    );
+    showMessage("services-message", "Сохраняем услугу...");
 
     try {
         let result;

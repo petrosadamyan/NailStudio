@@ -1080,3 +1080,13 @@ button:disabled {
         transition-duration: .01ms !important;
     }
 }
+.schedule-delete-button {
+    border-color: #f0d5dc;
+    background: #fff5f6;
+    color: #b65372;
+}
+
+.schedule-delete-button:hover:not(:disabled) {
+    border-color: #e5aebd;
+    background: #ffe8ed;
+}
