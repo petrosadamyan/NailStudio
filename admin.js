@@ -76,20 +76,30 @@ function getMoscowToday() {
 
 function showMessage(id, message) {
     const element = $(id);
-    if (element) element.textContent = message;
+
+    if (element) {
+        element.textContent = message;
+    }
 }
 
 function addTextElement(parent, tag, text, className) {
     const element = document.createElement(tag);
     element.textContent = text;
 
-    if (className) element.className = className;
+    if (className) {
+        element.className = className;
+    }
 
     parent.appendChild(element);
     return element;
 }
 
-function addButton(parent, text, callback, className = "admin-action") {
+function addButton(
+    parent,
+    text,
+    callback,
+    className = "admin-action"
+) {
     const button = document.createElement("button");
 
     button.type = "button";
@@ -116,7 +126,9 @@ function showDashboard() {
 async function restoreSession() {
     const { data, error } = await adminDb.auth.getSession();
 
-    if (error || !data.session) return;
+    if (error || !data.session) {
+        return;
+    }
 
     const { data: isAdmin, error: adminError } =
         await adminDb.rpc("is_admin");
@@ -145,13 +157,16 @@ loginForm.addEventListener("submit", async function (event) {
     showMessage("admin-login-message", "Проверяем данные...");
 
     try {
-        const { error: loginError } = await adminDb.auth.signInWithPassword({
-            email,
-            password
-        });
+        const { error: loginError } =
+            await adminDb.auth.signInWithPassword({
+                 email,
+                password
+            });
 
         if (loginError) {
-             throw new Error("Не удалось войти. Проверь почту и пароль.");
+            throw new Error(
+                "Не удалось войти. Проверь почту и пароль."
+            );
         }
 
         const { data: isAdmin, error: adminError } =
@@ -159,7 +174,10 @@ loginForm.addEventListener("submit", async function (event) {
 
         if (adminError || isAdmin !== true) {
             await adminDb.auth.signOut();
-            throw new Error("У аккаунта нет прав администратора.");
+
+            throw new Error(
+                "У аккаунта нет прав администратора."
+            );
         }
 
         $("work-date").value = getMoscowToday();
@@ -194,9 +212,17 @@ function setSection(name) {
         section.hidden = section.id !== `section-${name}`;
     });
 
-    if (name === "schedule") loadSchedule();
-    if (name === "bookings") loadBookings();
-    if (name === "services") loadServices();
+    if (name === "schedule") {
+        loadSchedule();
+    }
+
+    if (name === "bookings") {
+        loadBookings();
+    }
+
+    if (name === "services") {
+        loadServices();
+    }
 }
 
 document.querySelectorAll(".admin-nav button").forEach(button => {
@@ -219,7 +245,10 @@ $("admin-logout").addEventListener("click", async function () {
     loginScreen.hidden = false;
     loginForm.reset();
 
-    showMessage("admin-login-message", "Ты вышла из аккаунта.");
+    showMessage(
+        "admin-login-message",
+        "Ты вышла из аккаунта."
+    );
 });
 
 // -------------------- РАСПИСАНИЕ --------------------
@@ -230,7 +259,10 @@ $("schedule-form").addEventListener("submit", async function (event) {
     const date = $("work-date").value;
     const start = $("work-start").value;
     const end = $("work-end").value;
-    const button = $("schedule-form").querySelector('button[type="submit"]');
+
+    const button = $("schedule-form").querySelector(
+        'button[type="submit"]'
+    );
 
     if (!date || !start || !end || start >= end) {
         showMessage(
@@ -252,16 +284,20 @@ $("schedule-form").addEventListener("submit", async function (event) {
     }
 
     button.disabled = true;
-    showMessage("schedule-message", "Сохраняем расписание...");
+    showMessage("schedule-message", "Сохраняем интервал...");
 
     try {
+        // Проверяем, не пересекается ли новый интервал
+        // с уже существующими рабочими интервалами.
         const { data: existing, error: readError } = await adminDb
             .from("work_slots")
             .select("id,start_at,end_at")
             .lt("start_at", endAt)
             .gt("end_at", startAt);
 
-        if (readError) throw readError;
+        if (readError) {
+            throw readError;
+        }
 
         if (existing && existing.length > 0) {
             throw new Error(
@@ -269,6 +305,7 @@ $("schedule-form").addEventListener("submit", async function (event) {
             );
         }
 
+        // Каждый рабочий промежуток сохраняется отдельной строкой.
         const { error: insertError } = await adminDb
             .from("work_slots")
             .insert({
@@ -276,10 +313,14 @@ $("schedule-form").addEventListener("submit", async function (event) {
                 end_at: endAt,
                 is_open: true
             });
+         if (insertError) {
+            throw insertError;
+        }
 
-        if (insertError) throw insertError;
-
-        showMessage("schedule-message", "Рабочее время успешно добавлено!");
+        showMessage(
+            "schedule-message",
+            `Интервал ${start}–${end} успешно добавлен!`
+        );
 
         $("schedule-view-date").value = date;
 
@@ -292,23 +333,34 @@ $("schedule-form").addEventListener("submit", async function (event) {
             "Не удалось сохранить время: " + error.message
         );
     } finally {
-         button.disabled = false;
+        button.disabled = false;
     }
 });
 
-$("schedule-filter-form").addEventListener("submit", async function (event) {
-    event.preventDefault();
-    await loadSchedule();
-});
+$("schedule-filter-form").addEventListener(
+    "submit",
+    async function (event) {
+        event.preventDefault();
+        await loadSchedule();
+    }
+);
 
 async function loadSchedule() {
     const date = $("schedule-view-date").value;
     const list = $("schedule-list");
 
-    if (!date || !list) return;
+    if (!date || !list) {
+        return;
+    }
 
     list.replaceChildren();
-    addTextElement(list, "p", "Загружаем расписание...");
+
+    addTextElement(
+        list,
+        "p",
+        "Загружаем расписание...",
+        "schedule-loading"
+    );
 
     const { data, error } = await adminDb
         .from("work_slots")
@@ -329,44 +381,111 @@ async function loadSchedule() {
     }
 
     if (!data || data.length === 0) {
-        addTextElement(list, "p", "На эту дату рабочих интервалов нет.");
+        const emptyState = document.createElement("div");
+        emptyState.className = "schedule-empty";
+
+        addTextElement(
+            emptyState,
+            "span",
+            "♡",
+            "schedule-empty-icon"
+        );
+
+        addTextElement(
+            emptyState,
+            "h3",
+            "Пока нет интервалов"
+        );
+
+        addTextElement(
+            emptyState,
+            "p",
+            "Добавь рабочее время выше, и оно появится здесь."
+        );
+
+        list.appendChild(emptyState);
         return;
     }
 
-    data.forEach(slot => {
+    data.forEach((slot, index) => {
         const item = document.createElement("article");
-        item.className = "admin-item";
+        item.className = "admin-item schedule-item";
+
+        const header = document.createElement("div");
+        header.className = "schedule-item-header";
+
+        const timeBlock = document.createElement("div");
+        timeBlock.className = "schedule-time-block";
 
         addTextElement(
-            item,
-            "strong",
-            `${formatMoscowTime(slot.start_at)} — ${formatMoscowTime(slot.end_at)}`
+            timeBlock,
+            "span",
+            `ИНТЕРВАЛ ${index + 1}`,
+            "schedule-item-number"
         );
+
+        addTextElement(
+            timeBlock,
+            "strong",
+            `${formatMoscowTime(slot.start_at)} — ${formatMoscowTime(slot.end_at)}`,
+            "schedule-time"
+        );
+
+        header.appendChild(timeBlock);
+
+        const status = document.createElement("span");
+        status.className = slot.is_open
+            ? "schedule-status schedule-status-open"
+            : "schedule-status schedule-status-closed";
+
+        status.textContent = slot.is_open
+            ? "Открыт"
+            : "Закрыт";
+
+        header.appendChild(status);
+        item.appendChild(header);
 
         addTextElement(
             item,
             "p",
             slot.is_open
-                ? "Интервал открыт для записи"
-                : "Интервал закрыт для записи"
+                ? "Клиенты могут выбрать это время для записи."
+                : "Новые записи на это время недоступны.",
+            "schedule-item-description"
         );
 
+        const actions = document.createElement("div");
+        actions.className = "schedule-actions";
+
         if (slot.is_open) {
-            addButton(item, "Закрыть для записи", async () => {
-                await closeSlot(slot);
-            });
+            addButton(
+                actions,
+                "Закрыть для записи",
+                async () => {
+                    await closeSlot(slot);
+                },
+                "admin-action schedule-close-button"
+            );
         } else {
-            addButton(item, "Открыть для записи", async () => {
-                await reopenSlot(slot);
-            });
+            addButton(
+                actions,
+                "Открыть для записи",
+                async () => {
+                    await reopenSlot(slot);
+                },
+                 "admin-action schedule-open-button"
+            );
         }
 
+        item.appendChild(actions);
         list.appendChild(item);
     });
 }
 
 async function closeSlot(slot) {
-    if (!confirm("Закрыть этот интервал для новых записей?")) return;
+    if (!confirm("Закрыть этот интервал для новых записей?")) {
+        return;
+    }
 
     const { data: bookings, error: bookingError } = await adminDb
         .from("bookings")
@@ -404,7 +523,11 @@ async function closeSlot(slot) {
         return;
     }
 
-    showMessage("schedule-message", "Интервал закрыт для новых записей.");
+    showMessage(
+        "schedule-message",
+        "Интервал закрыт для новых записей."
+    );
+
     await loadSchedule();
 }
 
@@ -422,18 +545,25 @@ async function reopenSlot(slot) {
         return;
     }
 
-    showMessage("schedule-message", "Интервал снова открыт для записи.");
+    showMessage(
+        "schedule-message",
+        "Интервал снова открыт для записи."
+    );
+
     await loadSchedule();
 }
 
 // -------------------- ЗАПИСИ КЛИЕНТОВ --------------------
 
-$("bookings-filter-form").addEventListener("submit", async function (event) {
-    event.preventDefault();
+$("bookings-filter-form").addEventListener(
+    "submit",
+    async function (event) {
+        event.preventDefault();
 
-    const date = $("bookings-filter-date").value;
-    await loadBookings(date);
-});
+        const date = $("bookings-filter-date").value;
+        await loadBookings(date);
+    }
+);
 
 $("clear-bookings-filter").addEventListener("click", async function () {
     $("bookings-filter-date").value = "";
@@ -444,10 +574,14 @@ $("refresh-bookings").addEventListener("click", async function () {
     await loadBookings($("bookings-filter-date").value);
 });
 
-async function loadBookings(filterDate = $("bookings-filter-date").value) {
-     const list = $("bookings-list");
+async function loadBookings(
+    filterDate = $("bookings-filter-date").value
+) {
+    const list = $("bookings-list");
 
-    if (!list) return;
+    if (!list) {
+        return;
+    }
 
     list.replaceChildren();
     showMessage("bookings-message", "Загружаем записи...");
@@ -486,12 +620,18 @@ async function loadBookings(filterDate = $("bookings-filter-date").value) {
         const item = document.createElement("article");
         item.className = "admin-item";
 
-        addTextElement(item, "h3", booking.service_name || "Услуга");
+        addTextElement(
+            item,
+            "h3",
+            booking.service_name || "Услуга"
+        );
+
         addTextElement(
             item,
             "p",
             `Клиент: ${booking.customer_name || "Не указано"}`
         );
+
         addTextElement(
             item,
             "p",
@@ -502,13 +642,14 @@ async function loadBookings(filterDate = $("bookings-filter-date").value) {
             item,
             "p",
             `${formatMoscowDate(booking.start_at)}, ${formatMoscowTime(booking.start_at)} — ${formatMoscowTime(booking.end_at)}`
-        );
+             );
 
         addTextElement(
             item,
             "p",
             `Цена: ${booking.price_at_booking ?? "не указана"} ₽`
         );
+
         addTextElement(
             item,
             "p",
@@ -525,7 +666,9 @@ async function loadBookings(filterDate = $("bookings-filter-date").value) {
                 `Удалить запись клиента ${booking.customer_name || ""} на ${formatMoscowDate(booking.start_at)} в ${formatMoscowTime(booking.start_at)}?`
             );
 
-            if (!confirmed) return;
+            if (!confirmed) {
+                return;
+            }
 
             deleteButton.disabled = true;
             deleteButton.textContent = "Удаляем...";
@@ -546,7 +689,10 @@ async function loadBookings(filterDate = $("bookings-filter-date").value) {
                 return;
             }
 
-            showMessage("bookings-message", "Запись удалена.");
+            showMessage(
+                "bookings-message",
+                "Запись удалена."
+            );
 
             await loadBookings($("bookings-filter-date").value);
         });
@@ -565,7 +711,9 @@ $("cancel-service-edit").addEventListener("click", cancelServiceEdit);
 async function loadServices() {
     const list = $("services-list");
 
-    if (!list) return;
+    if (!list) {
+        return;
+    }
 
     list.replaceChildren();
     showMessage("services-message", "Загружаем услуги...");
@@ -587,29 +735,37 @@ async function loadServices() {
         "services-message",
         data.length
             ? `Найдено услуг: ${data.length}`
-         : "Услуг пока нет."
+            : "Услуг пока нет."
     );
 
     data.forEach(service => {
         const item = document.createElement("article");
         item.className = "admin-item";
 
-        addTextElement(item, "h3", service.name || "Услуга");
+        addTextElement(
+            item,
+            "h3",
+            service.name || "Услуга"
+        );
+
         addTextElement(
             item,
             "p",
             `Описание: ${service.description || "не указано"}`
         );
+
         addTextElement(
             item,
             "p",
             `Цена: ${service.price ?? "не указана"} ₽`
         );
+
         addTextElement(
             item,
             "p",
             `Длительность: ${service.duration_minutes ?? "не указана"} мин.`
         );
+
         addTextElement(
             item,
             "p",
@@ -626,10 +782,10 @@ async function loadServices() {
             $("service-name").value = service.name || "";
             $("service-description").value = service.description || "";
             $("service-price").value = service.price ?? "";
-            $("service-duration").value = service.duration_minutes ?? 60;
+            $("service-duration").value =
+                service.duration_minutes ?? 60;
             $("service-active").checked = Boolean(service.is_active);
-
-            $("save-service").textContent = "Сохранить изменения";
+             $("save-service").textContent = "Сохранить изменения";
             $("cancel-service-edit").hidden = false;
 
             $("service-form").scrollIntoView({
@@ -648,7 +804,9 @@ async function loadServices() {
                 `Удалить услугу «${service.name}»?`
             );
 
-            if (!confirmed) return;
+            if (!confirmed) {
+                return;
+            }
 
             const { error: deleteError } = await adminDb
                 .from("services")
@@ -664,7 +822,11 @@ async function loadServices() {
             }
 
             cancelServiceEdit();
-            showMessage("services-message", "Услуга удалена.");
+
+            showMessage(
+                "services-message",
+                "Услуга удалена."
+            );
 
             await loadServices();
         });
@@ -688,7 +850,10 @@ async function saveService(event) {
     };
 
     if (!service.name) {
-        showMessage("services-message", "Укажи название услуги.");
+        showMessage(
+            "services-message",
+            "Укажи название услуги."
+        );
         return;
     }
 
@@ -707,7 +872,11 @@ async function saveService(event) {
     }
 
     $("save-service").disabled = true;
-    showMessage("services-message", "Сохраняем услугу...");
+
+    showMessage(
+        "services-message",
+        "Сохраняем услугу..."
+    );
 
     try {
         let result;
@@ -720,21 +889,26 @@ async function saveService(event) {
         } else {
             result = await adminDb
                 .from("services")
-             .insert([service]);
+                .insert([service]);
         }
 
-        if (result.error) throw result.error;
+        if (result.error) {
+            throw result.error;
+        }
 
         $("service-form").reset();
         $("service-id").value = "";
         $("service-duration").value = 60;
         $("service-active").checked = true;
+
         $("save-service").textContent = "Добавить услугу";
         $("cancel-service-edit").hidden = true;
 
         showMessage(
             "services-message",
-            serviceId ? "Изменения сохранены." : "Услуга добавлена."
+            serviceId
+                ? "Изменения сохранены."
+                : "Услуга добавлена."
         );
 
         await loadServices();
@@ -753,6 +927,7 @@ function cancelServiceEdit() {
     $("service-id").value = "";
     $("service-duration").value = 60;
     $("service-active").checked = true;
+
     $("save-service").textContent = "Добавить услугу";
     $("cancel-service-edit").hidden = true;
 }

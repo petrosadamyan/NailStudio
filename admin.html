@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fff4fa">
     <title>Панель мастера | NailStudio</title>
 
-    <!-- Основной стиль сайта -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Стиль админ-панели -->
     <link rel="stylesheet" href="admin.css">
 </head>
 
@@ -27,7 +25,7 @@
                     type="email"
                     id="admin-email"
                     autocomplete="username"
-                       placeholder="Почта мастера"
+                    placeholder="Почта мастера"
                     required
                 >
 
@@ -54,60 +52,122 @@
                 <div>
                     <span class="eyebrow">NAILSTUDIO · WORKSPACE</span>
                     <h1>Панель мастера</h1>
-                    <p class="admin-note">Управление студией и записями клиентов.</p>
+                    <p class="admin-note">
+                        Управление студией и записями клиентов.
+                    </p>
                 </div>
+
                 <button type="button" id="admin-logout">Выйти</button>
             </div>
 
             <nav class="admin-nav" aria-label="Разделы панели">
-                <button type="button" class="active" data-section="schedule">
+                <button
+                    type="button"
+                    class="active"
+                    data-section="schedule"
+                    aria-pressed="true"
+                >
                     Расписание
                 </button>
-                <button type="button" data-section="bookings">
+
+                <button
+                    type="button"
+                    data-section="bookings"
+                    aria-pressed="false"
+                >
                     Записи клиентов
                 </button>
-                <button type="button" data-section="services">
+
+                <button
+                    type="button"
+                    data-section="services"
+                    aria-pressed="false"
+                >
                     Услуги
                 </button>
             </nav>
 
             <!-- РАСПИСАНИЕ -->
             <section id="section-schedule" class="admin-section">
-                <div class="admin-card">
-                    <h2>Рабочее время</h2>
-                    <p>Выбери дату и часы, когда готова принимать клиентов.</p>
+
+                <div class="admin-card schedule-editor">
+                    <span class="eyebrow">РАБОЧИЙ ГРАФИК</span>
+                    <h2>Добавить рабочее время</h2>
+
+                    <p>
+                        Выбери дату и укажи один промежуток, когда готова
+                        принимать клиентов.
+                    </p>
+
+                    <div class="schedule-tip">
+                        <span class="schedule-tip-icon" aria-hidden="true">♡</span>
+                        <div>
+                            <strong>Можно добавить несколько интервалов за день</strong>
+                            <p>
+                                Например, 10:00–14:00 и 16:00–18:00.
+                                Перерыв между ними останется свободным для отдыха.
+                            </p>
+                        </div>
+                    </div>
 
                     <form id="schedule-form" class="admin-form">
                         <label for="work-date">Дата работы</label>
                         <input type="date" id="work-date" required>
+                         <div class="schedule-time-fields">
+                            <div>
+                                <label for="work-start">Начало</label>
+                                <input
+                                    type="time"
+                                    id="work-start"
+                                    value="10:00"
+                                    required
+                                >
+                            </div>
 
-                        <label for="work-start">Начало работы</label>
-                        <input type="time" id="work-start" value="10:00" required>
-
-                        <label for="work-end">Окончание работы</label>
-                        <input type="time" id="work-end" value="18:00" required>
+                            <div>
+                                <label for="work-end">Окончание</label>
+                                <input
+                                    type="time"
+                                    id="work-end"
+                                    value="14:00"
+                                    required
+                                >
+                            </div>
+                        </div>
 
                         <button type="submit" class="primary-button">
-                            Добавить рабочее время
+                            + Добавить интервал
                         </button>
                     </form>
 
                     <p class="admin-note">
-                        Время указано по Москве. Добавляй только интервалы,
-                        когда действительно готова принимать клиентов.
+                        Время указано по Москве. Каждый интервал добавляется
+                        отдельно. Пересекающиеся интервалы не допускаются.
                     </p>
 
-                    <p id="schedule-message" class="admin-message" role="status"></p>
+                    <p
+                        id="schedule-message"
+                        class="admin-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
                 </div>
 
-                <div class="admin-card">
+                <div class="admin-card schedule-overview">
+                    <span class="eyebrow">ТВОЙ ГРАФИК</span>
                     <h2>Рабочие интервалы</h2>
 
+                    <p>
+                        Выбери день, чтобы увидеть все добавленные промежутки
+                        и управлять доступностью записи.
+                    </p>
+
                     <form id="schedule-filter-form" class="admin-form">
-                        <label for="schedule-view-date">Показать интервалы на дату</label>
+                        <label for="schedule-view-date">Дата расписания</label>
                         <input type="date" id="schedule-view-date" required>
+
                         <button type="submit" class="admin-action">
-                            Показать
+                            Показать интервалы
                         </button>
                     </form>
 
@@ -117,84 +177,148 @@
                 </div>
             </section>
 
-         <!-- ЗАПИСИ -->
-<section id="section-bookings" class="admin-section" hidden>
-    <div class="admin-card">
-        <h2>Записи клиентов</h2>
-        <p>Здесь можно просматривать записи и фильтровать их по дате.</p>
+            <!-- ЗАПИСИ КЛИЕНТОВ -->
+            <section id="section-bookings" class="admin-section" hidden>
+                <div class="admin-card">
+                    <span class="eyebrow">КЛИЕНТЫ</span>
+                    <h2>Записи клиентов</h2>
 
-        <form id="bookings-filter-form" class="admin-form">
-            <label for="bookings-filter-date">Показать записи на дату</label>
-            <input type="date" id="bookings-filter-date">
+                    <p>
+                        Здесь можно просматривать записи и фильтровать
+                        их по дате.
+                    </p>
 
-            <button type="submit" class="admin-action">
-                Показать записи
-            </button>
+                    <form id="bookings-filter-form" class="admin-form">
+                        <label for="bookings-filter-date">
+                            Показать записи на дату
+                        </label>
 
-            <button type="button" id="clear-bookings-filter" class="admin-action">
-                Показать все записи
-            </button>
-        </form>
+                        <input type="date" id="bookings-filter-date">
 
-        <button type="button" id="refresh-bookings" class="admin-action">
-            Обновить записи
-        </button>
+                        <button type="submit" class="admin-action">
+                            Показать записи
+                        </button>
 
-        <div id="bookings-list" class="admin-list"></div>
-        <p id="bookings-message" class="admin-message" role="status"></p>
-    </div>
-</section>
+                        <button
+                            type="button"
+                            id="clear-bookings-filter"
+                            class="admin-action"
+                        >
+                            Показать все записи
+                        </button>
+                    </form>
+
+                    <button
+                        type="button"
+                        id="refresh-bookings"
+                        class="admin-action"
+                    >
+                        Обновить записи
+                    </button>
+                     <div id="bookings-list" class="admin-list"></div>
+
+                    <p
+                        id="bookings-message"
+                        class="admin-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                </div>
+            </section>
+
             <!-- УСЛУГИ -->
             <section id="section-services" class="admin-section" hidden>
                 <div class="admin-card">
+                    <span class="eyebrow">ПРАЙС-ЛИСТ</span>
                     <h2>Услуги и цены</h2>
-                     <p>Здесь можно добавлять услуги, менять цены и продолжительность.</p>
 
-<form id="service-form" class="admin-form">
-    <input type="hidden" id="service-id">
+                    <p>
+                        Добавляй услуги, меняй стоимость и продолжительность.
+                    </p>
 
-    <label for="service-name">Название услуги</label>
-    <input type="text" id="service-name" placeholder="Например, Маникюр с покрытием" required>
+                    <form id="service-form" class="admin-form">
+                        <input type="hidden" id="service-id">
 
-    <label for="service-description">Описание</label>
-    <textarea id="service-description" placeholder="Описание услуги"></textarea>
+                        <label for="service-name">Название услуги</label>
+                        <input
+                            type="text"
+                            id="service-name"
+                            placeholder="Например, маникюр с покрытием"
+                            required
+                        >
 
-    <label for="service-price">Цена (₽)</label>
-    <input type="number" id="service-price" min="0" step="1" placeholder="1500" required>
+                        <label for="service-description">Описание</label>
+                        <textarea
+                            id="service-description"
+                            placeholder="Описание услуги"
+                        ></textarea>
 
-    <label for="service-duration">Длительность (минуты)</label>
-    <input type="number" id="service-duration" min="15" step="15" value="60" required>
+                        <label for="service-price">Цена (₽)</label>
+                        <input
+                            type="number"
+                            id="service-price"
+                            min="0"
+                            step="1"
+                            placeholder="1500"
+                            required
+                        >
 
-    <label class="admin-service-active">
-        <input type="checkbox" id="service-active" checked>
-        Услуга активна и доступна для записи
-    </label>
+                        <label for="service-duration">Длительность (минуты)</label>
+                        <input
+                            type="number"
+                            id="service-duration"
+                            min="15"
+                            step="15"
+                            value="60"
+                            required
+                        >
 
-    <button type="submit" id="save-service" class="primary-button">
-        Добавить услугу
-    </button>
+                        <label class="admin-service-active">
+                            <input type="checkbox" id="service-active" checked>
+                            Услуга активна и доступна для записи
+                        </label>
 
-    <button type="button" id="cancel-service-edit" class="admin-action" hidden>
-        Отменить редактирование
-    </button>
-</form>
+                        <button
+                            type="submit"
+                            id="save-service"
+                            class="primary-button"
+                        >
+                            Добавить услугу
+                        </button>
 
-<hr>
+                        <button
+                            type="button"
+                            id="cancel-service-edit"
+                            class="admin-action"
+                            hidden
+                        >
+                            Отменить редактирование
+                        </button>
+                    </form>
 
-<button type="button" id="refresh-services" class="admin-action">
-    Обновить услуги
-</button>
+                    <hr>
 
-<div id="services-list" class="admin-list"></div>
-<p id="services-message" class="admin-message" role="status"></p>
-                    
+                    <button
+                        type="button"
+                        id="refresh-services"
+                        class="admin-action"
+                    >
+                        Обновить услуги
+                    </button>
+
+                    <div id="services-list" class="admin-list"></div>
+
+                    <p
+                        id="services-message"
+                        class="admin-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
                 </div>
             </section>
         </section>
-
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="admin.js"></script>
 </body>
-</html>

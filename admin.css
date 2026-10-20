@@ -18,19 +18,15 @@
     --admin-radius: 22px;
 }
 
-/* Основная страница */
+/* ОСНОВА */
 
-body {
-    min-height: 100vh;
-    margin: 0;
-    color: var(--admin-text);
-    background:
-        radial-gradient(ellipse at 8% 5%, rgba(248, 204, 228, .65), transparent 35%),
-        radial-gradient(ellipse at 95% 25%, rgba(213, 197, 255, .5), transparent 32%),
-        linear-gradient(145deg, #fff8fc 0%, #fff4fa 48%, #f8f3ff 100%);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20px;
 }
 
 body,
@@ -42,8 +38,28 @@ textarea {
         Roboto, Arial, sans-serif;
 }
 
-* {
-    box-sizing: border-box;
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--admin-text);
+    background:
+        radial-gradient(
+            ellipse at 8% 5%,
+            rgba(248, 204, 228, .65),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 95% 25%,
+            rgba(213, 197, 255, .5),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            #fff8fc 0%,
+            #fff4fa 48%,
+            #f8f3ff 100%
+        );
+    -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -77,8 +93,6 @@ button:disabled {
     transform: none;
 }
 
-/* Контейнер */
-
 .admin-page {
     width: min(1120px, 100%);
     margin: 0 auto;
@@ -98,7 +112,7 @@ button:disabled {
     }
 }
 
-/* Верхние подписи */
+/* ЗАГОЛОВКИ */
 
 .eyebrow {
     display: inline-flex;
@@ -116,12 +130,15 @@ button:disabled {
     content: "";
     width: 7px;
     height: 7px;
+    flex-shrink: 0;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--admin-pink-dark), var(--admin-purple));
+    background: linear-gradient(
+        135deg,
+        var(--admin-pink-dark),
+        var(--admin-purple)
+    );
     box-shadow: 0 0 0 4px rgba(220, 151, 198, .15);
 }
-
-/* Заголовки */
 
 .admin-page h1,
 .admin-page h2,
@@ -157,11 +174,12 @@ button:disabled {
 }
 
 .admin-note {
+    margin-top: 18px;
     color: var(--admin-muted);
     font-size: 13px;
 }
 
-/* Карточки */
+/* КАРТОЧКИ */
 
 .admin-card {
     position: relative;
@@ -186,16 +204,17 @@ button:disabled {
     margin-bottom: 0;
 }
 
-/* Экран входа */
+/* ВХОД */
 
 .admin-login {
     width: 100%;
     max-width: 440px;
-    margin: clamp(35px, 10vh, 100px) auto;
+     margin: clamp(35px, 10vh, 100px) auto;
     padding: 38px;
     border-color: rgba(238, 198, 225, .95);
     box-shadow: 0 25px 70px rgba(158, 97, 151, .14);
 }
+
 .admin-login::before {
     content: "";
     position: absolute;
@@ -203,7 +222,12 @@ button:disabled {
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(90deg, #ed9ec5, #b18ae1, #ed9ec5);
+    background: linear-gradient(
+        90deg,
+        #ed9ec5,
+        #b18ae1,
+        #ed9ec5
+    );
 }
 
 .admin-login h1 {
@@ -214,7 +238,7 @@ button:disabled {
     margin-bottom: 22px;
 }
 
-/* Верхняя панель */
+/* ВЕРХНЯЯ ПАНЕЛЬ */
 
 .admin-top {
     display: flex;
@@ -256,7 +280,7 @@ button:disabled {
     transform: translateY(-2px);
 }
 
-/* Навигация */
+/* НАВИГАЦИЯ */
 
 .admin-nav {
     display: flex;
@@ -300,7 +324,7 @@ button:disabled {
     transform: translateY(-1px);
 }
 
-/* Формы */
+/* ФОРМЫ */
 
 .admin-form {
     display: flex;
@@ -368,7 +392,7 @@ button:disabled {
     min-height: 49px;
 }
 
-/* Кнопки действий */
+/* КНОПКИ */
 
 .admin-form button,
 .admin-action,
@@ -390,14 +414,14 @@ button:disabled {
     line-height: 1.35;
     text-align: center;
     cursor: pointer;
-}
+     }
 
 .admin-form button:hover:not(:disabled),
 .admin-action:hover:not(:disabled) {
     border-color: #d6a5cf;
     background: #fbe5f3;
     box-shadow: 0 5px 14px rgba(171, 102, 157, .12);
-     transform: translateY(-2px);
+    transform: translateY(-2px);
 }
 
 .admin-form .primary-button,
@@ -426,7 +450,7 @@ button:disabled {
     transform: scale(.98);
 }
 
-/* Чекбокс активности услуги */
+/* ЧЕКБОКС УСЛУГИ */
 
 .admin-form label.admin-service-active {
     display: flex;
@@ -448,7 +472,7 @@ button:disabled {
     accent-color: var(--admin-purple);
 }
 
-/* Списки и карточки записей */
+/* СПИСКИ */
 
 .admin-list {
     display: grid;
@@ -509,7 +533,7 @@ button:disabled {
     margin: 12px 8px 0 0;
 }
 
-/* Сообщения и статусы */
+/* СООБЩЕНИЯ */
 
 .admin-message {
     min-height: 0;
@@ -528,21 +552,7 @@ button:disabled {
     background: #fff5fb;
 }
 
-.admin-note {
-    margin-top: 18px;
-    color: var(--admin-muted);
-}
-
-/* Разделители */
-
-.admin-page hr {
-    height: 1px;
-    margin: 26px 0 12px;
-    border: 0;
-    background: linear-gradient(90deg, transparent, #ead5e8, transparent);
-}
-
-/* Фильтры дат */
+/* ФИЛЬТРЫ */
 
 #schedule-filter-form,
 #bookings-filter-form {
@@ -564,21 +574,300 @@ button:disabled {
     margin-right: 7px;
 }
 
-/* Скрытые разделы — не показываем до выбора */
+.admin-page hr {
+    height: 1px;
+    margin: 26px 0 12px;
+    border: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #ead5e8,
+        transparent
+    );
+}
+
+/* ========================================
+   РАСПИСАНИЕ
+======================================== */
+
+/* Поля начала и окончания рядом */
+
+.schedule-time-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.schedule-time-fields > div {
+    min-width: 0;
+}
+
+.schedule-time-fields label {
+    margin-top: 17px;
+}
+
+/* Подсказка о нескольких интервалах */
+
+.schedule-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin: 20px 0 12px;
+    padding: 17px;
+    border: 1px solid #f0d7e9;
+    border-radius: 15px;
+    background: linear-gradient(
+        125deg,
+        #fff2f9,
+        #f8f1ff
+    );
+}
+.schedule-tip-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--admin-pink-dark);
+    font-size: 22px;
+    box-shadow: 0 3px 10px rgba(150, 90, 150, .08);
+}
+
+.schedule-tip strong {
+    display: block;
+    color: #62476c;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.schedule-tip p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Заголовок списка расписания */
+
+.schedule-overview > .eyebrow,
+.schedule-editor > .eyebrow {
+    margin-bottom: 9px;
+}
+
+/* Карточка отдельного интервала */
+
+.schedule-item {
+    position: relative;
+    padding: 22px;
+    border-color: #ecd8ed;
+    border-radius: 18px;
+    background:
+        radial-gradient(
+            circle at 100% 0,
+            rgba(228, 209, 255, .22),
+            transparent 42%
+        ),
+        linear-gradient(145deg, #fff 0%, #fff9fd 100%);
+}
+
+.schedule-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 18px 0 0 18px;
+    background: linear-gradient(
+        180deg,
+        #e9a6c7,
+        #b29ae8
+    );
+}
+
+.schedule-item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.schedule-time-block {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.schedule-item-number {
+    color: #a57ab4;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.admin-item strong.schedule-time {
+    color: #644477;
+    font-size: clamp(19px, 3vw, 24px);
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -.4px;
+    overflow-wrap: anywhere;
+}
+
+/* Статусы */
+
+.schedule-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.schedule-status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+}
+
+.schedule-status-open {
+    border-color: #d7eddf;
+    background: #effaf2;
+    color: #397b51;
+}
+
+.schedule-status-open::before {
+    background: #56ae72;
+    box-shadow: 0 0 0 3px rgba(86, 174, 114, .13);
+}
+
+.schedule-status-closed {
+    border-color: #eadcf2;
+    background: #f7f0fc;
+    color: #8964a0;
+}
+
+.schedule-status-closed::before {
+    background: #a889c0;
+}
+
+/* Описание интервала */
+
+.admin-item p.schedule-item-description {
+    margin: 14px 0 0;
+    color: #88798f;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Кнопки внутри карточки расписания */
+
+.schedule-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 5px;
+}
+
+.schedule-actions .admin-action {
+    margin: 12px 0 0;
+}
+
+.schedule-close-button {
+    border-color: #f0d8e8;
+    background: #fff2f8;
+    color: #a14e83;
+}
+
+.schedule-close-button:hover:not(:disabled) {
+    border-color: #e6b8d2;
+    background: #fce5f1;
+}
+
+.schedule-open-button {
+    border-color: #dfd3f4;
+    background: #f6f0ff;
+    color: #7950ad;
+}
+
+.schedule-open-button:hover:not(:disabled) {
+    border-color: #c8b1e9;
+    background: #eee4ff;
+}
+
+/* Пустое расписание */
+
+.schedule-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 190px;
+    padding: 26px 18px;
+    border: 1px dashed #e4cce3;
+    border-radius: 17px;
+    background: linear-gradient(
+        145deg,
+        rgba(255, 246, 251, .9),
+        rgba(248, 243, 255, .9)
+    );
+    text-align: center;
+}
+
+.schedule-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--admin-pink-dark);
+    font-size: 26px;
+     box-shadow: 0 5px 16px rgba(150, 90, 150, .08);
+}
+
+.schedule-empty h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.admin-item .schedule-empty p,
+.schedule-empty p {
+    max-width: 300px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.schedule-loading {
+    padding: 14px 0;
+    color: var(--admin-muted);
+}
+
+/* Скрытые разделы */
 
 .admin-section[hidden],
 [hidden] {
     display: none !important;
 }
 
-/* Улучшенная прокрутка */
-
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 20px;
-}
-
-/* Планшеты */
+/* ========================================
+   ПЛАНШЕТЫ
+======================================== */
 
 @media (max-width: 800px) {
     .admin-page {
@@ -603,7 +892,9 @@ html {
     }
 }
 
-/* Телефоны */
+/* ========================================
+   ТЕЛЕФОНЫ
+======================================== */
 
 @media (max-width: 600px) {
     .admin-page {
@@ -616,7 +907,7 @@ html {
     }
 
     .admin-page h2 {
-         font-size: 20px;
+        font-size: 20px;
     }
 
     .admin-card {
@@ -710,13 +1001,78 @@ html {
     .admin-form label.admin-service-active {
         align-items: flex-start;
     }
+
+    /* Поля времени друг под другом на узком экране */
+
+    .schedule-time-fields {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .schedule-time-fields label {
+        margin-top: 15px;
+    }
+
+    .schedule-tip {
+        gap: 10px;
+        padding: 13px;
+    }
+
+    .schedule-tip-icon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+        font-size: 20px;
+    }
+
+    .schedule-tip strong {
+        font-size: 12px;
+    }
+
+    .schedule-tip p {
+        font-size: 12px;
+    }
+
+    .schedule-item {
+        padding: 18px 14px 17px 17px;
+    }
+
+    .schedule-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .admin-item strong.schedule-time {
+        font-size: 21px;
+    }
+
+    .schedule-status {
+        padding: 7px 10px;
+    }
+
+    .schedule-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .schedule-actions .admin-action {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .schedule-empty {
+        min-height: 170px;
+        padding: 22px 14px;
+    }
 }
 
-/* Учитываем настройки уменьшения анимации на устройстве */
+/* УВАЖЕНИЕ К НАСТРОЙКЕ УМЕНЬШЕНИЯ АНИМАЦИЙ */
 
 @media (prefers-reduced-motion: reduce) {
     *,
-    *::before,
+     *::before,
     *::after {
         scroll-behavior: auto !important;
         animation-duration: .01ms !important;
