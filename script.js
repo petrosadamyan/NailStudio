@@ -490,6 +490,40 @@ function setupBookingConfirmation() {
 
             status.textContent =
                 "Запись сохранена! Спасибо. Если мастер должен дополнительно связаться с тобой, дождись подтверждения.";
+             const successPopup = document.getElementById("booking-success-popup");
+const successDetails = document.getElementById("success-booking-details");
+
+if (successDetails) {
+    successDetails.replaceChildren();
+
+    const serviceName =
+        serviceSelect.options[serviceSelect.selectedIndex]?.textContent || "Услуга";
+
+    const details = [
+        ["Услуга", serviceName],
+        ["Дата", new Intl.DateTimeFormat("ru-RU", {
+            timeZone: "Europe/Moscow",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }).format(new Date(selectedStartAt))],
+        ["Время", formatTime(selectedStartAt)],
+        ["Имя", nameInput.value.trim()]
+    ];
+
+    details.forEach(function (item) {
+        const line = document.createElement("p");
+        const label = document.createElement("strong");
+
+        label.textContent = item[0] + ": ";
+        line.append(label, document.createTextNode(item[1]));
+        successDetails.appendChild(line);
+    });
+}
+
+if (successPopup) {
+    successPopup.hidden = false;
+}
 
             confirmation.hidden = true;
             selectedStartAt = null;
@@ -516,3 +550,34 @@ function setupBookingConfirmation() {
         }
     });
 }
+// ========================================
+// ЗАКРЫТИЕ ОКНА УСПЕШНОЙ ЗАПИСИ
+// ========================================
+
+document.addEventListener("DOMContentLoaded", function () {
+    const successPopup = document.getElementById("booking-success-popup");
+    const closeButton = document.getElementById("close-success-popup");
+    const doneButton = document.getElementById("success-popup-done");
+
+    function closeSuccessPopup() {
+        if (successPopup) {
+            successPopup.hidden = true;
+        }
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeSuccessPopup);
+    }
+
+    if (doneButton) {
+        doneButton.addEventListener("click", closeSuccessPopup);
+    }
+
+    if (successPopup) {
+        successPopup.addEventListener("click", function (event) {
+            if (event.target === successPopup) {
+                closeSuccessPopup();
+            }
+        });
+    }
+});
